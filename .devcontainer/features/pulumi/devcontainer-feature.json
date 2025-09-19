@@ -1,0 +1,20 @@
+{
+  "name": "Pulumi (via get.pulumi.com)",
+  "id": "pulumi",
+  "version": "1.2.5",
+  "description": "Pulumi is a modern infrastructure as code platform",
+  "documentationURL": "https://github.com/devcontainers-extra/features/tree/main/src/pulumi",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest", "3.43.0"],
+      "default": "latest",
+      "description": "Select the Pulumi version you would like to install"
+    },
+    "bashCompletion": {
+      "type": "boolean",
+      "default": true,
+      "description": "Add pulumi command-line completion to bash"
+    }
+  }
+}
