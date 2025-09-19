@@ -6,5 +6,6 @@
   "extends": ["config:recommended"],
   "pre-commit": {
     "enabled": true
-  }
+  },
+  "dependencyDashboard": false
 }
