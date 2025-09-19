@@ -1,1 +1,1 @@
-pre-commit
+pre_commit>=4.3.0
