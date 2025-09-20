@@ -17,6 +17,7 @@ jobs:
           - hello
           - pulumi
           - biome
+          - lazygit
         baseImage:
           - debian:latest
           - ubuntu:latest
@@ -39,6 +40,7 @@ jobs:
           - hello
           - pulumi
           - biome
+          - lazygit
     steps:
       - uses: actions/checkout@v5
 

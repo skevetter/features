@@ -1,0 +1,15 @@
+{
+  "name": "Lazygit",
+  "id": "lazygit",
+  "version": "1.0.0",
+  "description": "Lazygit is a simple terminal UI for git commands",
+  "documentationURL": "https://github.com/jesseduffield/lazygit",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest", "v0.55.1"],
+      "default": "latest",
+      "description": "Select the Lazygit version you would like to install"
+    }
+  }
+}
