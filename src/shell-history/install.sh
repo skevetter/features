@@ -35,6 +35,13 @@ setup_persistent_history() {
         echo "# Shell History Configuration"
         echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
     } >> /etc/zsh/zshrc
+
+    {
+        echo ""
+        echo "# Shell History Configuration"
+        echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
+    } >> /home/"${FEATURE_USER}"/.zshrc
+
 }
 
 
@@ -47,8 +54,7 @@ main() {
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="$(setup_persistent_history)" \
-        --option version="$VERSION"
+        --option command="$(setup_persistent_history)"
 
     echo "Done!"
 }
