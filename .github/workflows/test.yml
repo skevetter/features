@@ -15,6 +15,7 @@ jobs:
         features:
           - color
           - hello
+          - pulumi
         baseImage:
           - debian:latest
           - ubuntu:latest
@@ -35,6 +36,7 @@ jobs:
         features:
           - color
           - hello
+          - pulumi
     steps:
       - uses: actions/checkout@v5
 
