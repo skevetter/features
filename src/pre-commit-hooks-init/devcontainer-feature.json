@@ -5,6 +5,7 @@
   "description": "Initialize pre-commit hooks for your project",
   "documentationURL": "https://pre-commit.com/",
   "dependsOn": {
-    "ghcr.io/devcontainers-extra/features/pre-commit:2": {}
+    "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
+    "ghcr.io/devcontainers/features/git:1": {}
   }
 }
