@@ -18,6 +18,7 @@ jobs:
           - pulumi
           - biome
           - lazygit
+          - shell-history
         baseImage:
           - debian:latest
           - ubuntu:latest
@@ -41,6 +42,7 @@ jobs:
           - pulumi
           - biome
           - lazygit
+          - shell-history
     steps:
       - uses: actions/checkout@v5
 
