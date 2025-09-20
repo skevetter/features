@@ -25,6 +25,8 @@ main() {
         --option version="${VERSION}" \
         --option assetRegex="^pulumi-.*-linux-${arch_suffix}\\.tar\\.gz$" \
         --option binaryNames="pulumi"
+
+    echo "Done!"
 }
 
 main "$@"

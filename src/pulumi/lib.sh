@@ -1,272 +1,167 @@
-#!/usr/bin/env bash
-set -euo pipefail
+clean_download() {
+    # The purpose of this function is to download a file with minimal impact on container layer size
+    # this means if no valid downloader is found (curl or wget) then we install a downloader (currently wget) in a
+    # temporary manner, and making sure to
+    # 1. uninstall the downloader at the return of the function
+    # 2. revert back any changes to the package installer database/cache (for example apt-get lists)
+    # The above steps will minimize the leftovers being created while installing the downloader
+    # Supported distros:
+    #  debian/ubuntu/alpine
 
-# Guard against multiple sourcing
-if [ "${__DEVX_LIB_SH__:-}" = "1" ]; then
-    return 0 2>/dev/null
-fi
-__DEVX_LIB_SH__=1
+    url=$1
+    output_location=$2
+    tempdir=$(mktemp -d)
+    downloader_installed=""
 
-: "${NANOLAYER_VERSION:=v0.5.6}"
-: "${DEVX_LOG_LEVEL:=info}" # debug | info | warn | error
+    _apt_get_install() {
+        tempdir=$1
 
+        # copy current state of apt list - in order to revert back later (minimize contianer layer size)
+        cp -p -R /var/lib/apt/lists "$tempdir"
+        apt-get update -y
+        apt-get -y install --no-install-recommends wget ca-certificates
+    }
 
-#######################################
-# Public Functions
-#######################################
-ensure_nanolayer() {
-    local variable_name="${1:?output variable name is required}"
-    local required_version="${2:?required version is required}"
+    _apt_get_cleanup() {
+        tempdir=$1
 
-    local _nanolayer_location=""
-    _nanolayer_location="$(devx_nl__find_preexisting "${required_version}")" || _nanolayer_location=""
+        echo "removing wget"
+        apt-get -y purge wget --auto-remove
 
-    if [ -z "${_nanolayer_location}" ]; then
-        _nanolayer_location="$(devx_nl__download_and_unpack "${required_version}")" || return 1
-        export NANOLAYER_CLI_LOCATION="${_nanolayer_location}"
-    fi
+        echo "revert back apt lists"
+        rm -rf /var/lib/apt/lists/*
+        rm -r /var/lib/apt/lists && mv "$tempdir"/lists /var/lib/apt/lists
+    }
 
-    devx__setvar "${variable_name}" "${_nanolayer_location}"
-}
+    _apk_install() {
+        tempdir=$1
+        # copy current state of apk cache - in order to revert back later (minimize contianer layer size)
+        cp -p -R /var/cache/apk "$tempdir"
 
+        apk add --no-cache  wget
+    }
 
-#######################################
-# Core helpers
-#######################################
-devx__setvar() {
-    local var="${1:?var required}"
-    local val="${2:-}"
-    printf -v "$var" '%s' "$val"
-}
+    _apk_cleanup() {
+        tempdir=$1
 
-devx__has() {
-    command -v "$1" >/dev/null 2>&1
-}
-
-devx__normalize_version() {
-    printf "%s" "${1#v}"
-}
-
-#######################################
-# Logging
-#######################################
-devx_log__lvl() {
-    case "${DEVX_LOG_LEVEL}" in
-        debug) echo 0 ;;
-        info)  echo 1 ;;
-        warn)  echo 2 ;;
-        error) echo 3 ;;
-        *)     echo 1 ;;
-    esac
-}
-
-devx_log__should() { # $1=level
-    local want have
-    case "$1" in
-        debug) want=0 ;;
-        info)  want=1 ;;
-        warn)  want=2 ;;
-        error) want=3 ;;
-        *)     want=1 ;;
-    esac
-    have="$(devx_log__lvl)"
-    [ "$have" -le "$want" ]
-}
-
-devx_log__debug() { devx_log__should debug && echo "[DEBUG] $*" >&2; }
-devx_log__info()  { devx_log__should info  && echo "[INFO]  $*" >&2; }
-devx_log__warn()  { devx_log__should warn  && echo "[WARN]  $*" >&2; }
-devx_log__error() { devx_log__should error && echo "[ERROR] $*" >&2; }
-
-#######################################
-# Downloader
-#######################################
-devx_dl__have_downloader() {
-    if devx__has curl; then
-        echo "curl"
-    elif devx__has wget; then
-        echo "wget"
+        echo "removing wget"
+        apk del wget
+    }
+    # try to use either wget or curl if one of them already installer
+    if type curl >/dev/null 2>&1; then
+        downloader=curl
+    elif type wget >/dev/null 2>&1; then
+        downloader=wget
     else
-        echo ""
+        downloader=""
     fi
-}
 
-devx_dl__apt_install() { apt-get update && apt-get install -y wget; }
-devx_dl__apt_cleanup() { apt-get remove -y wget; }
-devx_dl__apk_install() { apk add --no-cache wget; }
-devx_dl__apk_cleanup() { apk del wget; }
-
-devx_dl__ensure() {
-    local out_name_var="${1:?out var required}"
-    local out_flag_var="${2:?out flag var required}"
-    local tempdir="${3:?tempdir required}"
-
-    local downloader="" installed=0
-    downloader="$(devx_dl__have_downloader)"
-
-    if [ -z "${downloader}" ]; then
-        if [ -x "/usr/bin/apt-get" ]; then
-            devx_dl__apt_install "${tempdir}"
-            downloader="wget"; installed=1
-        elif [ -x "/sbin/apk" ]; then
-            devx_dl__apk_install "${tempdir}"
-            downloader="wget"; installed=1
+    # in case none of them is installed, install wget temporarly
+    if [ -z "$downloader" ] ; then
+        if [ -x "/usr/bin/apt-get" ] ; then
+            _apt_get_install "$tempdir"
+        elif [ -x "/sbin/apk" ] ; then
+            _apk_install "$tempdir"
         else
-            devx_log__error "Distro not supported for temporary downloader installation"
-            return 1
+            echo "distro not supported"
+            exit 1
         fi
+        downloader="wget"
+        downloader_installed="true"
     fi
 
-    devx__setvar "${out_name_var}" "${downloader}"
-    devx__setvar "${out_flag_var}" "${installed}"
-}
-
-devx_dl__perform() {
-    local downloader="${1:?downloader required}"
-    local url="${2:?url required}"
-    local output_location="${3:?output required}"
-    if [ "${downloader}" = "wget" ]; then
-        wget --quiet --tries=3 --timeout=30 -O "${output_location}" "${url}"
+    if [ "$downloader" = "wget" ] ; then
+        wget -q "$url" -O "$output_location"
     else
-        curl --fail --silent --show-error --location --retry 3 --retry-delay 2 \
-             --connect-timeout 30 -o "${output_location}" "${url}"
+        curl -sfL "$url" -o "$output_location"
     fi
-}
 
-devx_dl__cleanup() {
-    local installed_flag="${1:?installed flag required}"
-    local tempdir="${2:?tempdir required}"
-    if [ "${installed_flag}" -eq 1 ] 2>/dev/null; then
-        if [ -x "/usr/bin/apt-get" ]; then
-            devx_dl__apt_cleanup "${tempdir}"
-        elif [ -x "/sbin/apk" ]; then
-            devx_dl__apk_cleanup "${tempdir}"
+    # NOTE: the cleanup procedure was not implemented using `trap X RETURN` only because
+    # alpine lack bash, and RETURN is not a valid signal under sh shell
+    if [ -n "$downloader_installed" ] ; then
+        if [ -x "/usr/bin/apt-get" ] ; then
+            _apt_get_cleanup "$tempdir"
+        elif [ -x "/sbin/apk" ] ; then
+            _apk_cleanup "$tempdir"
+        else
+            echo "distro not supported"
+            exit 1
         fi
     fi
+
 }
 
-devx_dl__clean_download() {
-    local url="${1:?url is required}"
-    local output_location="${2:?output location is required}"
-    local tempdir; tempdir="$(mktemp -d)"
-    local downloader="" downloader_installed=0
+ensure_nanolayer() {
+    # Ensure existance of the nanolayer cli program
+    local variable_name=$1
 
-    if ! devx_dl__ensure downloader downloader_installed "${tempdir}"; then
-        rm -rf "${tempdir}" 2>/dev/null || true
-        return 1
-    fi
+    local required_version=$2
 
-    local dl_rc=0
-    devx_dl__perform "${downloader}" "${url}" "${output_location}" || dl_rc=$?
-    devx_dl__cleanup "${downloader_installed}" "${tempdir}"
-    rm -rf "${tempdir}" 2>/dev/null || true
-    return "${dl_rc}"
-}
+    local __nanolayer_location=""
 
-#######################################
-# Detect System
-#######################################
-devx_sys__arch_suffix() {
-    case "$(uname -m)" in
-        x86_64|amd64) printf "x64" ;;
-        aarch64|arm64) printf "arm64" ;;
-        *) devx_log__error "Unsupported architecture: $(uname -m)"; return 1 ;;
-    esac
-}
-
-devx_sys__is_alpine() { [ -x "/sbin/apk" ]; }
-
-devx_sys__libc() {
-    if devx_sys__is_alpine || (command -v ldd >/dev/null 2>&1 && ldd --version 2>&1 | grep -qi musl); then
-        printf "musl"
-    else
-        printf "gnu"
-    fi
-}
-
-devx_sys__make_asset_regex() {
-    local name_prefix="${1:?}"
-    local os="${2:?}"
-    local arch="${3:?}"
-    local ext_regex="${4:?}"
-    printf "^%s-.*-%s-%s\\.%s$" "${name_prefix}" "${os}" "${arch}" "${ext_regex}"
-}
-
-#######################################
-# Nanolayer
-#######################################
-devx_nl__extract_version_norm() {
-    local raw="$1"
-    local ver
-    ver="$(printf "%s" "${raw}" | grep -Eo 'v?[0-9]+(\.[0-9]+)*' | head -n1 || true)"
-    devx__normalize_version "${ver}"
-}
-
-devx_nl__arch_for_release() {
-    case "$(uname -m)" in
-        x86_64|amd64) printf "x86_64" ;;
-        aarch64|arm64) printf "aarch64" ;;
-        *) devx_log__error "No nanolayer binaries for architecture: $(uname -m)"; return 1 ;;
-    esac
-}
-
-devx_nl__tar_filename() {
-    local arch clib
-    arch="$(devx_nl__arch_for_release)" || return 1
-    clib="$(devx_sys__libc)"
-    printf "nanolayer-%s-unknown-linux-%s.tgz" "${arch}" "${clib}"
-}
-
-devx_nl__find_preexisting() {
-    local required_version="${1:?required version is required}"
-    # shellcheck disable=SC2155
-    local want_norm="$(devx__normalize_version "${required_version}")"
-
-    if [ -n "${NANOLAYER_FORCE_CLI_INSTALLATION:-}" ]; then
-        devx_log__debug "NANOLAYER_FORCE_CLI_INSTALLATION set; skipping pre-existing checks"
-        return 0
-    fi
-
-    local candidate=""
-    if [ -z "${NANOLAYER_CLI_LOCATION:-}" ]; then
-        if devx__has nanolayer; then
-            devx_log__debug "Found a pre-existing nanolayer in PATH"
-            candidate="nanolayer"
+    # If possible - try to use an already installed nanolayer
+    if [ -z "${NANOLAYER_FORCE_CLI_INSTALLATION}" ]; then
+        if [ -z "${NANOLAYER_CLI_LOCATION}" ]; then
+            if type nanolayer >/dev/null 2>&1; then
+                echo "Found a pre-existing nanolayer in PATH"
+                __nanolayer_location=nanolayer
+            fi
+        elif [ -f "${NANOLAYER_CLI_LOCATION}" ] && [ -x "${NANOLAYER_CLI_LOCATION}" ] ; then
+            __nanolayer_location=${NANOLAYER_CLI_LOCATION}
+            echo "Found a pre-existing nanolayer which were given in env variable: $__nanolayer_location"
         fi
-    elif [ -f "${NANOLAYER_CLI_LOCATION}" ] && [ -x "${NANOLAYER_CLI_LOCATION}" ]; then
-        candidate="${NANOLAYER_CLI_LOCATION}"
-        devx_log__debug "Found a pre-existing nanolayer from env: ${candidate}"
+
+        # make sure its of the required version
+        if ! [ -z "${__nanolayer_location}" ]; then
+            local current_version
+            current_version=$($__nanolayer_location --version)
+
+            if ! [ "$current_version" == "$required_version" ]; then
+                echo "skipping usage of pre-existing nanolayer. (required version $required_version does not match existing version $current_version)"
+                __nanolayer_location=""
+            fi
+        fi
+
     fi
 
-    [ -z "${candidate}" ] && return 0
+    # If not previuse installation found, download it temporarly and delete at the end of the script
+    if [ -z "${__nanolayer_location}" ]; then
 
-    local raw out_norm
-    if ! raw="$("${candidate}" --version 2>/dev/null)"; then
-        devx_log__warn "Existing nanolayer found but failed to get version, ignoring it."
-        return 0
+        if [ "$(uname -sm)" = 'Linux x86_64' ] || [ "$(uname -sm)" = "Linux aarch64" ]; then
+            tmp_dir=$(mktemp -d -t nanolayer-XXXXXXXXXX)
+
+            # shellcheck disable=SC2329
+            clean_up () {
+                ARG=$?
+                rm -rf "$tmp_dir"
+                exit "$ARG"
+            }
+            trap clean_up EXIT
+
+
+            if [ -x "/sbin/apk" ] ; then
+                clib_type=musl
+            else
+                clib_type=gnu
+            fi
+
+            tar_filename=nanolayer-"$(uname -m)"-unknown-linux-$clib_type.tgz
+
+            # clean download will minimize leftover in case a downloaderlike wget or curl need to be installed
+            clean_download https://github.com/devcontainers-extra/nanolayer/releases/download/"$required_version"/"$tar_filename" "$tmp_dir"/"$tar_filename"
+
+            tar xfzv "$tmp_dir"/"$tar_filename" -C "$tmp_dir"
+            chmod a+x "$tmp_dir"/nanolayer
+            __nanolayer_location=$tmp_dir/nanolayer
+
+
+        else
+            echo "No binaries compiled for non-x86-linux architectures yet: $(uname -m)"
+            exit 1
+        fi
     fi
-    out_norm="$(devx_nl__extract_version_norm "${raw}")"
-    if [ "${out_norm}" != "${want_norm}" ]; then
-        devx_log__debug "Skipping pre-existing nanolayer (required ${required_version} != existing ${raw})"
-        return 0
-    fi
 
-    printf "%s" "${candidate}"
-}
+    # Expose outside the resolved location
+    export "${variable_name}"="$__nanolayer_location"
 
-devx_nl__download_and_unpack() {
-    local required_version="${1:?required version is required}"
-    local tar_filename tmp_dir url
-    tar_filename="$(devx_nl__tar_filename)" || return 1
-    tmp_dir="$(mktemp -d -t nanolayer-XXXXXXXXXX)"
-    url="https://github.com/devcontainers-extra/nanolayer/releases/download/${required_version}/${tar_filename}"
-
-    if ! devx_dl__clean_download "${url}" "${tmp_dir}/${tar_filename}"; then
-        devx_log__error "Failed to download nanolayer (${url})"
-        rm -rf "${tmp_dir}" || true
-        return 1
-    fi
-    tar xfz "${tmp_dir}/${tar_filename}" -C "${tmp_dir}"
-    chmod a+x "${tmp_dir}/nanolayer"
-    printf "%s" "${tmp_dir}/nanolayer"
 }
