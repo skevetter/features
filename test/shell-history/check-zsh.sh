@@ -5,6 +5,6 @@ set -e
 source dev-container-features-test-lib
 
 # The 'check' command comes from the dev-container-features-test-lib.
-check "verify /shellhistory is present" test -d /shellhistory
+check "zsh histfile is /shellhistory/.zsh_history" zsh -lc "echo \$HISTFILE | grep \"/shellhistory/.zsh_history\""
 
 reportResults
