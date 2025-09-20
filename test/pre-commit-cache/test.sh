@@ -5,9 +5,9 @@ set -e
 source dev-container-features-test-lib
 
 # The 'check' command comes from the dev-container-features-test-lib.
-check "verify /pre-commit-cache is present" test -d /pre-commit-cache
-check "PRE_COMMIT_HOME is set to /pre-commit-cache" test "$PRE_COMMIT_HOME" = "/pre-commit-cache"
-check "/etc/profile.d/pre_commit.sh contains PRE_COMMIT_HOME" grep -q 'PRE_COMMIT_HOME=/pre-commit-cache' /etc/profile.d/pre_commit.sh
-check "/etc/bash.bashrc contains PRE_COMMIT_HOME" grep -q 'PRE_COMMIT_HOME=/pre-commit-cache' /etc/bash.bashrc
+check "verify /pre_commit_cache is present" test -d /pre_commit_cache
+check "PRE_COMMIT_HOME is set to /pre_commit_cache" test "$PRE_COMMIT_HOME" = "/pre_commit_cache"
+check "/etc/profile.d/pre_commit.sh contains PRE_COMMIT_HOME" grep -q 'PRE_COMMIT_HOME=/pre_commit_cache' /etc/profile.d/pre_commit.sh
+check "/etc/bash.bashrc contains PRE_COMMIT_HOME" grep -q 'PRE_COMMIT_HOME=/pre_commit_cache' /etc/bash.bashrc
 
 reportResults
