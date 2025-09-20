@@ -12,24 +12,6 @@ setup_cache() {
     mkdir -p "${PRE_COMMIT_CACHE_DIR}"
     chown "${FEATURE_USER}" "${PRE_COMMIT_CACHE_DIR}"
     chmod 700 "${PRE_COMMIT_CACHE_DIR}"
-
-    {
-        echo ""
-        echo "# Pre-commit Cache Configuration"
-        echo "export PRE_COMMIT_HOME=${PRE_COMMIT_CACHE_DIR}"
-    } >> /etc/profile.d/pre_commit.sh
-
-    {
-        echo ""
-        echo "# Pre-commit Cache Configuration"
-        echo "export PRE_COMMIT_HOME=${PRE_COMMIT_CACHE_DIR}"
-    } >> /etc/bash.bashrc
-
-    {
-        echo ""
-        echo "# Pre-commit Cache Configuration"
-        echo "export PRE_COMMIT_HOME=${PRE_COMMIT_CACHE_DIR}"
-    } >> /etc/zsh/zshenv
 }
 
 main() {
@@ -43,6 +25,19 @@ main() {
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
         --option command="$(setup_cache)" \
         --option version="$VERSION"
+
+    FILES=(/etc/profile.d/pre_commit_cache.sh /etc/zsh/zshenv /etc/bash.bashrc)
+    for f in "${FILES[@]}"; do
+        mkdir -p "$(dirname "$f")" 2>/dev/null || true
+        touch "$f"
+        if ! grep -Fq "# Pre-commit Cache Configuration" "$f"; then
+            cat >> "$f" <<EOF
+
+# Pre-commit Cache Configuration
+export PRE_COMMIT_HOME=${PRE_COMMIT_CACHE_DIR}
+EOF
+        fi
+    done
 
     echo "Done!"
 }
