@@ -1,7 +1,7 @@
 {
   "name": "Shell History",
   "id": "shell-history",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Persist shell history across dev container instances.",
   "mounts": [
     {
