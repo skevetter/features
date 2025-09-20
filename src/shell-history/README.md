@@ -1,24 +1,20 @@
 
-# Biome (biome)
+# Shell History (shell-history)
 
-Biome is a modern infrastructure as code platform
+Persist shell history across dev container instances.
 
 ## Example Usage
 
 ```json
 "features": {
-    "ghcr.io/skevetter/features/biome:1": {}
+    "ghcr.io/skevetter/features/shell-history:0": {}
 }
 ```
 
-## Options
 
-| Options Id | Description | Type | Default Value |
-|-----|-----|-----|-----|
-| version | Select the Biome version you would like to install | string | latest |
 
 
 
 ---
 
-_Note: This file was auto-generated from the [devcontainer-feature.json](https://github.com/skevetter/features/blob/main/src/biome/devcontainer-feature.json).  Add additional notes to a `NOTES.md`._
+_Note: This file was auto-generated from the [devcontainer-feature.json](https://github.com/skevetter/features/blob/main/src/shell-history/devcontainer-feature.json).  Add additional notes to a `NOTES.md`._
