@@ -18,6 +18,18 @@ setup_cache() {
         echo "# Pre-commit Cache Configuration"
         echo "export PRE_COMMIT_HOME=${PRE_COMMIT_CACHE_DIR}"
     } >> /etc/profile.d/pre_commit.sh
+
+    {
+        echo ""
+        echo "# Pre-commit Cache Configuration"
+        echo "export PRE_COMMIT_HOME=${PRE_COMMIT_CACHE_DIR}"
+    } >> "/etc/bash.bashrc"
+
+    {
+        echo ""
+        echo "# Pre-commit Cache Configuration"
+        echo "export PRE_COMMIT_HOME=${PRE_COMMIT_CACHE_DIR}"
+    } >> "/etc/zsh/zshenv"
 }
 
 main() {
