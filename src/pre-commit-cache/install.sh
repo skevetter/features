@@ -5,7 +5,7 @@ set -eo pipefail
 . ./lib.sh
 
 FEATURE_USER="${FEATURE_USER:-${_REMOTE_USER:-"vscode"}}"
-PRE_COMMIT_CACHE_DIR="/pre-commit-cache"
+PRE_COMMIT_CACHE_DIR="/pre_commit_cache"
 NANOLAYER_VERSION="v0.5.6"
 
 setup_cache() {

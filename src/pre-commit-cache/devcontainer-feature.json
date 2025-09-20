@@ -7,7 +7,7 @@
   "mounts": [
     {
       "source": "${devcontainerId}-pre-commit-cache",
-      "target": "/pre-commit-cache",
+      "target": "/pre_commit_cache",
       "type": "volume"
     }
   ]
