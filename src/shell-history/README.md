@@ -7,7 +7,7 @@ Persist shell history across dev container instances.
 
 ```json
 "features": {
-    "ghcr.io/skevetter/features/shell-history:0": {}
+    "ghcr.io/skevetter/features/shell-history:1": {}
 }
 ```
 
