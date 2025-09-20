@@ -5,14 +5,18 @@
     "context": "."
   },
   "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-    "source=devcontainer-zshhistory,target=/cmd_history,type=volume"
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
   ],
   "features": {
     "ghcr.io/devcontainers-extra/features/act:1": {},
+    "ghcr.io/devcontainers-extra/features/devcontainers-cli:1": {},
     "ghcr.io/devcontainers-extra/features/fzf:1": {},
     "ghcr.io/devcontainers-extra/features/mise:1": {},
-    "ghcr.io/devcontainers-extra/features/pre-commit:2": {}
+    "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
+    "ghcr.io/skevetter/features/biome:1": {},
+    "ghcr.io/skevetter/features/lazygit:1": {},
+    "ghcr.io/skevetter/features/pre-commit-cache:1": {},
+    "ghcr.io/skevetter/features/shell-history:1": {}
   },
   "postCreateCommand": "bash .devcontainer/post_create.sh",
   "customizations": {
