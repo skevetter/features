@@ -10,12 +10,16 @@ main() {
     echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
     ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
 
+    echo "=========================================================="
+    printenv
+    echo "=========================================================="
+
     # shellcheck disable=SC2154
     "${nanolayer_location}" \
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="pre-commit install --install-hooks" \
+        --option command="git version && pre-commit install --install-hooks" \
         --option version="$VERSION"
 
     echo "Done!"
