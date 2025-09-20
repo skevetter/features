@@ -1,0 +1,15 @@
+{
+  "name": "Biome",
+  "id": "biome",
+  "version": "1.0.0",
+  "description": "Biome is a modern infrastructure as code platform",
+  "documentationURL": "https://biomejs.dev/",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest", "2.2.4"],
+      "default": "latest",
+      "description": "Select the Biome version you would like to install"
+    }
+  }
+}

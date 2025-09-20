@@ -16,6 +16,7 @@ jobs:
           - color
           - hello
           - pulumi
+          - biome
         baseImage:
           - debian:latest
           - ubuntu:latest
@@ -37,6 +38,7 @@ jobs:
           - color
           - hello
           - pulumi
+          - biome
     steps:
       - uses: actions/checkout@v5
 
