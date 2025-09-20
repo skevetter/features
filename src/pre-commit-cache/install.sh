@@ -23,8 +23,7 @@ main() {
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="$(setup_cache)" \
-        --option version="$VERSION"
+        --option command="$(setup_cache)"
 
     FILES=(/etc/profile.d/pre_commit_cache.sh /etc/zsh/zshenv /etc/bash.bashrc)
     for f in "${FILES[@]}"; do
