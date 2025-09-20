@@ -1,7 +1,7 @@
 {
   "name": "Pre-commit Cache",
   "id": "pre-commit-cache",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Initialize pre-commit cache for your project",
   "documentationURL": "https://pre-commit.com/",
   "mounts": [
