@@ -5,7 +5,7 @@ set -eo pipefail
 . ./lib.sh
 
 main() {
-    log "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
+    echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
     ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
 
     local arch_suffix
@@ -15,7 +15,7 @@ main() {
         *) error "Unsupported architecture: $(uname -m)"; return 1 ;;
     esac
 
-    log "Installing Pulumi (version: ${VERSION})"
+    echo "Installing Pulumi (version: ${VERSION})"
     # shellcheck disable=SC2154
     "${nanolayer_location}" \
         install \
