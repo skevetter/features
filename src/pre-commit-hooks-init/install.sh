@@ -14,13 +14,13 @@ main() {
     printenv
     echo "=========================================================="
 
+    echo "Initializing pre-commit hooks in workspace folder: ${WORKSPACEFOLDER}"
     # shellcheck disable=SC2154
     "${nanolayer_location}" \
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="git version && pre-commit install --install-hooks" \
-        --option version="$VERSION"
+        --option command="cd ${WORKSPACEFOLDER} && pre-commit install --install-hooks"
 
     echo "Done!"
 }
