@@ -1,7 +1,7 @@
 
 # Biome (biome)
 
-Biome is a modern infrastructure as code platform
+Biome is a fast formatter for JavaScript, TypeScript, JSX, TSX, JSON, HTML, CSS and GraphQL that scores 97% compatibility with Prettier, saving CI and developer time.
 
 ## Example Usage
 
