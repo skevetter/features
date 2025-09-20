@@ -10,11 +10,5 @@
     "features": {
       "shell-history": {}
     }
-  },
-  "check-zsh": {
-    "image": "mcr.microsoft.com/devcontainers/base:debian",
-    "features": {
-      "shell-history": {}
-    }
   }
 }
