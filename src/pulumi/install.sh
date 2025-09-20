@@ -4,6 +4,8 @@ set -eo pipefail
 
 . ./lib.sh
 
+NANOLAYER_VERSION="v0.5.6"
+
 main() {
     echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
     ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
