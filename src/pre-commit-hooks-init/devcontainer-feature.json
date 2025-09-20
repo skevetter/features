@@ -4,13 +4,6 @@
   "version": "1.0.0",
   "description": "Initialize pre-commit hooks for your project",
   "documentationURL": "https://pre-commit.com/",
-  "options": {
-    "workspaceFolder": {
-      "type": "string",
-      "default": "${containerWorkspaceFolder}",
-      "description": "Path to the workspace folder where pre-commit should be initialized"
-    }
-  },
   "dependsOn": {
     "ghcr.io/devcontainers-extra/features/pre-commit:2": {}
   }
