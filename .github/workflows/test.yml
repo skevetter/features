@@ -19,7 +19,7 @@ jobs:
           - biome
           - lazygit
           - shell-history
-          - pre-commit-hooks-init
+          - pre-commit-cache
         baseImage:
           - debian:latest
           - ubuntu:latest
@@ -44,7 +44,7 @@ jobs:
           - biome
           - lazygit
           - shell-history
-          - pre-commit-hooks-init
+          - pre-commit-cache
     steps:
       - uses: actions/checkout@v5
 

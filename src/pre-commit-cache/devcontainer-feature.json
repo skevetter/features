@@ -1,0 +1,14 @@
+{
+  "name": "Pre-commit Cache",
+  "id": "pre-commit-cache",
+  "version": "1.0.0",
+  "description": "Initialize pre-commit cache for your project",
+  "documentationURL": "https://pre-commit.com/",
+  "mounts": [
+    {
+      "source": "${devcontainerId}-pre-commit-cache",
+      "target": "/pre-commit-cache",
+      "type": "volume"
+    }
+  ]
+}
