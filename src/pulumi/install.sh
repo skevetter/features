@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-. ../lib.sh
+. ./lib.sh
 
 main() {
     log "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
