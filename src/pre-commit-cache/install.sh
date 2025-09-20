@@ -42,7 +42,7 @@ main() {
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="$(setup_cache)"
+        --option command="$(deploy)"
 
     echo "Done!"
 }
