@@ -1,0 +1,15 @@
+{
+  "id": "neovim",
+  "version": "1.0.0",
+  "name": "neovim (via GitHub Releases)",
+  "documentationURL": "https://github.com/neovim/neovim",
+  "description": "Installs neovim from GitHub Releases.",
+  "options": {
+    "version": {
+      "default": "latest",
+      "description": "Select the version to install.",
+      "proposals": ["latest"],
+      "type": "string"
+    }
+  }
+}
