@@ -1,0 +1,7 @@
+{
+  "id": "gpg-hack",
+  "version": "1.0.0",
+  "name": "gpg-hack",
+  "documentationURL": "http://github.com/skevetter/features/tree/main/src/gpg-hack",
+  "description": "Set up GPG for use in devcontainers."
+}
