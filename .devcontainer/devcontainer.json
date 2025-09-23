@@ -15,6 +15,7 @@
     "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
     "ghcr.io/skevetter/features/biome:1": {},
     "ghcr.io/skevetter/features/lazygit:1": {},
+    "ghcr.io/skevetter/features/neovim:1": {},
     "ghcr.io/skevetter/features/pre-commit-cache:1": {},
     "ghcr.io/skevetter/features/shell-history:1": {}
   },
