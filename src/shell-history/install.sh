@@ -35,6 +35,24 @@ setup_persistent_history() {
         echo "# Shell History Configuration"
         echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
     } >> /etc/zsh/zshrc
+
+    # If oh-my-zsh is installed, also add to the user's .zshrc
+    # because oh-my-zsh overwrites /etc/zsh/zshrc settings
+    HOME_DIR="$(eval echo "~${FEATURE_USER}")"
+    if [ -d "${HOME_DIR}/.oh-my-zsh" ]; then
+        ZSHRC="${HOME_DIR}/.zshrc"
+        touch "${ZSHRC}"
+        chown "${FEATURE_USER}" "${ZSHRC}"
+        chmod 644 "${ZSHRC}"
+
+        if ! grep -qF "HISTFILE=${ZSH_SHELLHISTORY_FILE}" "${ZSHRC}"; then
+            {
+                echo ""
+                echo "# Shell History Configuration"
+                echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
+            } >> "${ZSHRC}"
+        fi
+    fi
 }
 
 
