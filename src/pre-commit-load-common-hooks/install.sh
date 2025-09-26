@@ -9,6 +9,8 @@ PRE_COMMIT_DEFAULT_BIN="/usr/local/py-utils/bin/pre-commit"
 NANOLAYER_VERSION="v0.5.6"
 
 deploy() {
+    set -ex
+
     export PRE_COMMIT_HOME
 
     if [ -z "${PRE_COMMIT_BIN}" ] ; then
@@ -68,7 +70,7 @@ main() {
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="$deploy"
+        --option command="$(deploy)"
 
     echo "Done!"
 }
