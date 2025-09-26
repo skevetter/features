@@ -11,6 +11,7 @@ jobs:
   test-scenarios:
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 2
       matrix:
         features:
           - biome
@@ -20,6 +21,7 @@ jobs:
           - lazygit
           - neovim
           - pre-commit-cache
+          - pre-commit-load-common-hooks
           - pulumi
           - shell-history
           - uv
@@ -48,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test-global
     strategy:
+      max-parallel: 2
       matrix:
         features:
           - biome
@@ -57,6 +60,7 @@ jobs:
           - lazygit
           - neovim
           - pre-commit-cache
+          - pre-commit-load-common-hooks
           - pulumi
           - shell-history
           - uv

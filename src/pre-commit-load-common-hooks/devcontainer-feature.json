@@ -1,0 +1,18 @@
+{
+  "name": "Pre-commit Load Common Hooks",
+  "id": "pre-commit-load-common-hooks",
+  "version": "1.0.0",
+  "description": "Downloads common pre-commit hooks.",
+  "documentationURL": "https://pre-commit.com/",
+  "mounts": [
+    {
+      "source": "${devcontainerId}-pre-commit-cache",
+      "target": "/pre_commit_cache",
+      "type": "volume"
+    }
+  ],
+  "dependsOn": {
+    "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
+    "ghcr.io/skevetter/features/pre-commit-cache:1": {}
+  }
+}
