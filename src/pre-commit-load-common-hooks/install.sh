@@ -8,10 +8,44 @@ PRE_COMMIT_HOME="/pre_commit_cache"
 PRE_COMMIT_DEFAULT_BIN="/usr/local/py-utils/bin/pre-commit"
 NANOLAYER_VERSION="v0.5.6"
 
-deploy() {
-    set -ex
+pre_commit_config_install() {
+    config=$1
+    echo "Installing pre-commit ${config} hooks"
 
-    export PRE_COMMIT_HOME
+    nanolayer_command="set -ex
+export PRE_COMMIT_HOME=$PRE_COMMIT_HOME
+
+GIT_DIR=$(mktemp -d)
+cd $GIT_DIR
+git init --quiet
+git config --global init.defaultBranch main
+git config --global user.email \"dev@container\"
+git config --global user.name \"devcontainer\"
+git config --global safe.directory \"*\"
+touch README.md
+git add README.md
+git commit -m \"Initial commit\"
+
+cat > .pre-commit-config.yaml <<'EOF'
+$(cat "config/${config}.yaml")
+EOF
+
+$PRE_COMMIT_BIN install --install-hooks -c .pre-commit-config.yaml
+rm -rf .git
+
+echo Nanolayer command completed"
+
+    # shellcheck disable=SC2154
+    "${nanolayer_location}" \
+        install \
+        devcontainer-feature \
+        "ghcr.io/devcontainers-extra/features/bash-command:1" \
+        --option command="$nanolayer_command"
+}
+
+main() {
+    echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
+    ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
 
     if [ -z "${PRE_COMMIT_BIN}" ] ; then
         if type pre-commit >/dev/null 2>&1; then
@@ -24,53 +58,28 @@ deploy() {
         fi
     fi
 
-    git init --quiet
-
-    install_cfgs=(base lua shell python)
-
-    if command -v node >/dev/null 2>&1; then
-        install_cfgs+=(biome)
-    else
-        echo "Skipping Biome hook installation."
-    fi
+    pre_commit_config_install base
+    pre_commit_config_install python
+    pre_commit_config_install shell
+    pre_commit_config_install lua
 
     if command -v rustc >/dev/null 2>&1; then
-        install_cfgs+=(rust)
+        pre_commit_config_install rust
     else
         echo "Skipping Rust hook installation."
     fi
 
     if command -v go >/dev/null 2>&1; then
-        install_cfgs+=(golang)
+        pre_commit_config_install golang
     else
         echo "Skipping Go hook installation."
     fi
 
     if command -v terraform >/dev/null 2>&1; then
-        install_cfgs+=(terraform)
+        pre_commit_config_install terraform
     else
         echo "Skipping Terraform hook installation."
     fi
-
-    for cfg in "${install_cfgs[@]}"; do
-        "$PRE_COMMIT_BIN" install --install-hooks -c "config/${cfg}.yaml" || {
-            echo "Failed to install ${cfg} hooks"
-        }
-    done
-
-    rm -rf .git
-}
-
-main() {
-    echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
-    ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
-
-    # shellcheck disable=SC2154
-    "${nanolayer_location}" \
-        install \
-        devcontainer-feature \
-        "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="$(deploy)"
 
     echo "Done!"
 }
