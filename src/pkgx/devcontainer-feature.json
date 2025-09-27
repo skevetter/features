@@ -1,0 +1,15 @@
+{
+  "id": "pkgx",
+  "version": "1.0.0",
+  "name": "pkgx",
+  "documentationURL": "https://github.com/pkgxdev/pkgx",
+  "description": "pkgx is a 4 MiB, standalone binary that can run anything.",
+  "options": {
+    "version": {
+      "default": "latest",
+      "description": "Select the version to install.",
+      "proposals": ["latest"],
+      "type": "string"
+    }
+  }
+}
