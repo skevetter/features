@@ -81,6 +81,8 @@ main() {
         echo "Skipping Terraform hook installation."
     fi
 
+    chown -R "${FEATURE_USER}" "${PRE_COMMIT_HOME}"
+
     echo "Done!"
 }
 
