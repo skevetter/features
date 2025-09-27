@@ -36,18 +36,15 @@ setup_persistent_history() {
         echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
     } >>/etc/zsh/zshrc
 
-    # Ensure HISTFILE is also configured for non-interactive login shells
-    # (the test invokes `zsh -lc`, which does not source zshrc)
-    # zsh reads zprofile for login shells (interactive or not), so add it there too
     {
         echo ""
         echo "# Shell History Configuration"
         echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
-    } >>/etc/zsh/zprofile
+    } >>/etc/profile.d/shell_history.sh
 
     # If oh-my-zsh is installed, also add to the user's .zshrc
     # because oh-my-zsh overwrites /etc/zsh/zshrc settings
-    HOME_DIR="$(eval echo "~${FEATURE_USER}")"
+    HOME_DIR="/home/${FEATURE_USER}"
     if [ -d "${HOME_DIR}/.oh-my-zsh" ]; then
         ZSHRC="${HOME_DIR}/.zshrc"
         touch "${ZSHRC}"
@@ -61,8 +58,6 @@ setup_persistent_history() {
                 echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
             } >>"${ZSHRC}"
         fi
-    else
-        echo "oh-my-zsh not detected, skipping update to ${HOME_DIR}/.zshrc"
     fi
 }
 
