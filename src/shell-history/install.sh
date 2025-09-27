@@ -24,7 +24,7 @@ setup_persistent_history() {
         echo ""
         echo "# Shell History Configuration"
         echo "export HISTFILE=${BASH_SHELLHISTORY_FILE}"
-    } >> /etc/bash.bashrc
+    } >>/etc/bash.bashrc
 
     touch "${ZSH_SHELLHISTORY_FILE}"
     chown "${FEATURE_USER}" "${ZSH_SHELLHISTORY_FILE}"
@@ -34,7 +34,7 @@ setup_persistent_history() {
         echo ""
         echo "# Shell History Configuration"
         echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
-    } >> /etc/zsh/zshrc
+    } >>/etc/zsh/zshrc
 
     # If oh-my-zsh is installed, also add to the user's .zshrc
     # because oh-my-zsh overwrites /etc/zsh/zshrc settings
@@ -50,11 +50,12 @@ setup_persistent_history() {
                 echo ""
                 echo "# Shell History Configuration"
                 echo "export HISTFILE=${ZSH_SHELLHISTORY_FILE}"
-            } >> "${ZSHRC}"
+            } >>"${ZSHRC}"
         fi
+    else
+        echo "oh-my-zsh not detected, skipping update to ${HOME_DIR}/.zshrc"
     fi
 }
-
 
 main() {
     echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
