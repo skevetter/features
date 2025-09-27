@@ -11,5 +11,8 @@
       "proposals": ["latest"],
       "type": "string"
     }
+  },
+  "dependsOn": {
+    "ghcr.io/devcontainers-extra/features/curl-apt-get:1": {}
   }
 }
