@@ -4,11 +4,5 @@
     "features": {
       "shell-history": {}
     }
-  },
-  "check-bash": {
-    "image": "mcr.microsoft.com/devcontainers/base:debian",
-    "features": {
-      "shell-history": {}
-    }
   }
 }
