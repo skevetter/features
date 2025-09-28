@@ -14,7 +14,7 @@ main() {
 
     CACHE_CONFIGURATION="
 # Pre-commit Cache Configuration
-export PRE_COMMIT_HOME=\${PRE_COMMIT_CACHE_DIR}
+export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR
 "
 
     CACHE_CONFIG_B64=$(echo "$CACHE_CONFIGURATION" | base64 -w 0)
