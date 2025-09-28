@@ -4,9 +4,12 @@ set -eo pipefail
 
 . ./lib.sh
 
+USER="${FEATURE_USER:-${_REMOTE_USER:-"vscode"}}"
 PRE_COMMIT_HOME="/pre_commit_cache"
 PRE_COMMIT_DEFAULT_BIN="/usr/local/py-utils/bin/pre-commit"
 NANOLAYER_VERSION="v0.5.6"
+
+run_as_user() { sudo -u "$USER" "$@"; }
 
 pre_commit_config_install() {
     config=$1
@@ -36,7 +39,7 @@ rm -rf .git
 echo Nanolayer command completed"
 
     # shellcheck disable=SC2154
-    "${nanolayer_location}" \
+    run_as_user "${nanolayer_location}" \
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
@@ -80,8 +83,6 @@ main() {
     else
         echo "Skipping Terraform hook installation."
     fi
-
-    chown -R "${FEATURE_USER}" "${PRE_COMMIT_HOME}"
 
     echo "Done!"
 }
