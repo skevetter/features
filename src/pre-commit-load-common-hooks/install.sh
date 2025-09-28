@@ -39,11 +39,11 @@ rm -rf .git
 echo Nanolayer command completed"
 
     # shellcheck disable=SC2154
-    run_as_user "${nanolayer_location}" \
+    "${nanolayer_location}" \
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="$nanolayer_command"
+        --option command="$(run_as_user) $nanolayer_command"
 }
 
 main() {
