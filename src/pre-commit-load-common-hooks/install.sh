@@ -20,7 +20,6 @@ git config user.name 'Dev Container Features'
 git config user.email 'dev@container'
 git config --local init.defaultBranch main
 
-# Create config file with proper YAML content
 cat > .pre-commit-config.yaml << 'EOF'
 ${CONFIG_CONTENT}
 EOF
@@ -51,7 +50,24 @@ main() {
 
     install_config
     install_config "python"
-    install_config "biome"
+    install_config "lua"
+    install_config "shell"
+
+    if command -v go &> /dev/null; then
+        install_config "golang"
+    fi
+
+    if command -v rustc &> /dev/null; then
+        install_config "rust"
+    fi
+
+    if command -v node &> /dev/null; then
+        install_config "biome"
+    fi
+
+    if command -v terraform &> /dev/null; then
+        install_config "terraform"
+    fi
 }
 
 main "$@"
