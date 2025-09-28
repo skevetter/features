@@ -36,12 +36,14 @@ rm -rf .git
 
 echo Nanolayer command completed"
 
+    nanolayer_command_b64="$(printf '%s' "$nanolayer_command" | base64 -w 0)"
+
     # shellcheck disable=SC2154
     "${nanolayer_location}" \
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="sudo -u $USER echo ${nanolayer_command} > /tmp/command.sh && sudo -u $USER bash /tmp/command.sh"
+        --option command="echo ${nanolayer_command_b64} | base64 -d > /tmp/command.sh && sudo -u $USER bash /tmp/command.sh"
 }
 
 main() {
