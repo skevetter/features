@@ -4,7 +4,7 @@ set -eo pipefail
 
 . ./lib.sh
 
-FEATURE_USER="${FEATURE_USER:-${_REMOTE_USER:-"vscode"}}"
+USERNAME="${USERNAME:-${_REMOTE_USER:-"vscode"}}"
 SHELLHISTORY_DIR="/shellhistory"
 BASH_SHELLHISTORY_FILE="${SHELLHISTORY_DIR}/.bash_history"
 ZSH_SHELLHISTORY_FILE="${SHELLHISTORY_DIR}/.zsh_history"
@@ -13,11 +13,11 @@ NANOLAYER_VERSION="v0.5.6"
 setup_persistent_history() {
     mkdir -p "${SHELLHISTORY_DIR}"
 
-    chown "${FEATURE_USER}" "${SHELLHISTORY_DIR}"
+    chown "${USERNAME}" "${SHELLHISTORY_DIR}"
     chmod 700 "${SHELLHISTORY_DIR}"
 
     touch "${BASH_SHELLHISTORY_FILE}"
-    chown "${FEATURE_USER}" "${BASH_SHELLHISTORY_FILE}"
+    chown "${USERNAME}" "${BASH_SHELLHISTORY_FILE}"
     chmod 600 "${BASH_SHELLHISTORY_FILE}"
 
     {
@@ -27,7 +27,7 @@ setup_persistent_history() {
     } >>/etc/bash.bashrc
 
     touch "${ZSH_SHELLHISTORY_FILE}"
-    chown "${FEATURE_USER}" "${ZSH_SHELLHISTORY_FILE}"
+    chown "${USERNAME}" "${ZSH_SHELLHISTORY_FILE}"
     chmod 600 "${ZSH_SHELLHISTORY_FILE}"
 
     {
@@ -44,11 +44,11 @@ setup_persistent_history() {
 
     # If oh-my-zsh is installed, also add to the user's .zshrc
     # because oh-my-zsh overwrites /etc/zsh/zshrc settings
-    HOME_DIR="/home/${FEATURE_USER}"
+    HOME_DIR="/home/${USERNAME}"
     if [ -d "${HOME_DIR}/.oh-my-zsh" ]; then
         ZSHRC="${HOME_DIR}/.zshrc"
         touch "${ZSHRC}"
-        chown "${FEATURE_USER}" "${ZSHRC}"
+        chown "${USERNAME}" "${ZSHRC}"
         chmod 644 "${ZSHRC}"
 
         if ! grep -qF "HISTFILE=${ZSH_SHELLHISTORY_FILE}" "${ZSHRC}"; then
