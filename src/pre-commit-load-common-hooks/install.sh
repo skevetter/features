@@ -33,9 +33,8 @@ PRE_COMMIT_HOME=$PRE_COMMIT_HOME pre-commit install --install-hooks"
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="sudo -u $USERNAME bash -c 'echo ${SCRIPT_B64} | base64 -d | bash'"
+        --option command="su - $USERNAME bash -c 'echo ${SCRIPT_B64} | base64 -d | bash'"
 }
-
 
 main() {
     echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
@@ -48,10 +47,14 @@ main() {
         exit 1
     fi
 
+    ls -la /pre_commit_cache || true
+
     install_config
     install_config "python"
     install_config "lua"
     install_config "shell"
+
+    ls -la /pre_commit_cache || true
 
     if command -v go &> /dev/null; then
         install_config "golang"
