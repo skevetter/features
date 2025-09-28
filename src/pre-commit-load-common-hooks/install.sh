@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# TODO: Instead of installing hooks as user, create a group pre-commit and set group ownership of /pre_commit_cache to that group
+# and add the user to that group. This would allow multiple users to share the same cache.
+
 set -eo pipefail
 
 . ./lib.sh
