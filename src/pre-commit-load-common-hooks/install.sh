@@ -9,8 +9,6 @@ PRE_COMMIT_HOME="/pre_commit_cache"
 PRE_COMMIT_DEFAULT_BIN="/usr/local/py-utils/bin/pre-commit"
 NANOLAYER_VERSION="v0.5.6"
 
-run_as_user() { sudo -u "$USER" "$@"; }
-
 pre_commit_config_install() {
     config=$1
     echo "Installing pre-commit ${config} hooks"
@@ -43,7 +41,7 @@ echo Nanolayer command completed"
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="$(run_as_user) $nanolayer_command"
+        --option command="sudo -u $USER $nanolayer_command"
 }
 
 main() {
