@@ -24,7 +24,15 @@ export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="echo ${CACHE_CONFIG_B64} | base64 -d | tee -a /etc/profile.d/pre_commit_cache.sh /etc/bash.bashrc /etc/zsh/zshrc > /dev/null"
+        --option command="echo ${CACHE_CONFIG_B64} | base64 -d | tee -a /etc/profile.d/pre_commit_cache.sh /etc/bash.bashrc > /dev/null"
+
+    if [ -f /etc/zsh/zshrc ]; then
+        "${nanolayer_location}" \
+            install \
+            devcontainer-feature \
+            "ghcr.io/devcontainers-extra/features/bash-command:1" \
+            --option command="echo ${CACHE_CONFIG_B64} | base64 -d | tee -a /etc/zsh/zshrc > /dev/null"
+    fi
 
     PRE_COMMIT_CACHE_DIR_SCRIPT="
     mkdir -p ${PRE_COMMIT_CACHE_DIR}
