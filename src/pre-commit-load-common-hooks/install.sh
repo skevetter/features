@@ -41,7 +41,7 @@ echo Nanolayer command completed"
         install \
         devcontainer-feature \
         "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="sudo -u $USER $nanolayer_command"
+        --option command="sudo -u $USER echo ${nanolayer_command} > /tmp/command.sh && sudo -u $USER bash /tmp/command.sh"
 }
 
 main() {
