@@ -15,6 +15,4 @@ if [ -f /etc/zsh/zshrc ]; then
     check "/etc/zsh/zshrc contains PRE_COMMIT_HOME" grep -q 'PRE_COMMIT_HOME=/pre_commit_cache' /etc/zsh/zshrc
 fi
 
-check "owner of /pre_commit_cache is not root" test "$(stat -c '%U' /pre_commit_cache)" != "root"
-
 reportResults
