@@ -1,0 +1,21 @@
+{
+  "name": "shfmt (via Github Releases)",
+  "id": "shfmt",
+  "version": "1.0.2",
+  "description": "Shfmt is a shell parser, formatter, and interpreter.",
+  "documentationURL": "http://github.com/skevetter/features/tree/main/src/shfmt",
+  "options": {
+    "version": {
+      "default": "latest",
+      "description": "Select the version to install.",
+      "proposals": ["latest"],
+      "type": "string"
+    }
+  },
+  "installsAfter": ["ghcr.io/devcontainers-extra/features/gh-release"],
+  "customizations": {
+    "vscode": {
+      "extensions": ["foxundermoon.shell-format"]
+    }
+  }
+}
