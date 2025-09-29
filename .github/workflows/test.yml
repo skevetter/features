@@ -43,6 +43,8 @@ jobs:
               - './**/pulumi/**'
             shell-history:
               - './**/shell-history/**'
+            shfmt:
+              - './**/shfmt/**'
             uv:
               - './**/uv/**'
 
