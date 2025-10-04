@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Test Feature",
+      "type": "shell",
+      "command": "devcontainer",
+      "args": [
+        "features",
+        "test",
+        "-i",
+        "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "-f",
+        "${input:featureName}"
+      ],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "featureName",
+      "type": "promptString",
+      "description": "Feature name (e.g. fzf)",
+      "default": ""
+    }
+  ]
+}

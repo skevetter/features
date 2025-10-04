@@ -28,6 +28,8 @@ jobs:
               - './**/biome/**'
             color:
               - './**/color/**'
+            fzf:
+              - './**/fzf/**'
             gpg-hack:
               - './**/gpg-hack/**'
             hello:
