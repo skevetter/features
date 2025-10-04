@@ -5,6 +5,12 @@ set -e
 source dev-container-features-test-lib
 
 #------------------------------------------------------------------------------
+# Environment
+#------------------------------------------------------------------------------
+
+env
+
+#------------------------------------------------------------------------------
 # Basic Installation and Directory Checks
 #------------------------------------------------------------------------------
 
@@ -32,6 +38,12 @@ check "expect 9 hooks are installed" test "$(find /pre_commit_cache -maxdepth 1 
 #------------------------------------------------------------------------------
 # User and Group Verification
 #------------------------------------------------------------------------------
+
+if [ "$(id -u)" -eq 0 ]; then
+    echo "Running as root, skipping user checks."
+    reportResults
+    exit 0
+fi
 
 echo "Testing user permissions and group membership..."
 
