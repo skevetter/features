@@ -26,6 +26,8 @@ jobs:
           filters: |
             biome:
               - './**/biome/**'
+            catppuccin:
+              - './**/catppuccin/**'
             color:
               - './**/color/**'
             fzf:
