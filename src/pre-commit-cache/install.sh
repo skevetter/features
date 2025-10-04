@@ -2,8 +2,6 @@
 
 set -eo pipefail
 
-. ./lib.sh
-
 USERNAME="${USERNAME:-${_REMOTE_USER:-"vscode"}}"
 PRE_COMMIT_CACHE_DIR="/pre_commit_cache"
 

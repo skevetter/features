@@ -1,6 +1,6 @@
 {
   "id": "catppuccin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "catppuccin",
   "documentationURL": "http://github.com/skevetter/features/tree/main/src/catppuccin",
   "description": "catppuccin is a high-contrast color scheme for the terminal.",
