@@ -36,7 +36,12 @@ fi
 
 check "bashrc includes fzf" grep -F "fzf" /etc/bash.bashrc
 
-check "zshrc includes fzf" grep -F "fzf" /etc/zsh/zshrc
+if [ -f /etc/zsh/zshrc ]; then
+    echo "zshrc file exists; checking for fzf configuration..."
+    check "zshrc includes fzf" grep -F "fzf" /etc/zsh/zshrc
+else
+    echo "zshrc file does not exist; skipping fzf configuration check for zshrc"
+fi
 
 #------------------------------------------------------------------------------
 # Results
