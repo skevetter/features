@@ -23,11 +23,13 @@ main() {
         echo "eval \"\$(fzf --bash)\""
     } >> /etc/bash.bashrc
 
-    {
-        echo ""
-        echo "# fzf Configuration"
-        echo "source <(fzf --zsh)"
-    } >> /etc/zsh/zshrc
+    if [ -f /etc/zsh/zshrc ]; then
+        {
+            echo ""
+            echo "# fzf Configuration"
+            echo "source <(fzf --zsh)"
+        } >> /etc/zsh/zshrc
+    fi
 
     echo "Done!"
 }
