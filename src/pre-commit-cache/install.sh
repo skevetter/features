@@ -67,7 +67,9 @@ main() {
     fi
 
     # Create group
-    groupadd pre-commit
+    if ! getent group pre-commit >/dev/null 2>&1; then
+        groupadd pre-commit
+    fi
 
     # Add the user to the group
     usermod -aG pre-commit "$USERNAME"
