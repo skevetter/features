@@ -48,9 +48,17 @@ main() {
         install_config "terraform"
     fi
 
+    # Create the pre-commit group
     groupadd pre-commit
+
+    # Add the user to the pre-commit group
     usermod -aG pre-commit "$USERNAME"
+
+    # Set ownership to the pre-commit group
     chown -R :"pre-commit" "$PRE_COMMIT_HOME"
+
+    # Allow group read, write, and execute to allow vscode user to update the cache
+    chmod -R g+rwX "$PRE_COMMIT_HOME"
 
     rm -rf .git
 }
