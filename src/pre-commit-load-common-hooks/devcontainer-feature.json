@@ -12,7 +12,6 @@
     }
   ],
   "dependsOn": {
-    "ghcr.io/devcontainers-extra/features/curl-apt-get:1": {},
     "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/skevetter/features/pre-commit-cache:1": {}
