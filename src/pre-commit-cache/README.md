@@ -1,7 +1,7 @@
 
 # Pre-commit Cache (pre-commit-cache)
 
-Initialize pre-commit cache for your project
+Initialize pre-commit cache with optional preloading of common hooks
 
 ## Example Usage
 
@@ -11,7 +11,11 @@ Initialize pre-commit cache for your project
 }
 ```
 
+## Options
 
+| Options Id | Description | Type | Default Value |
+|-----|-----|-----|-----|
+| preloadHooks | Preload a set of common pre-commit hooks into the cache | boolean | true |
 
 
 
