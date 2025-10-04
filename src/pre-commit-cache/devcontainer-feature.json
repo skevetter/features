@@ -1,14 +1,32 @@
 {
   "name": "Pre-commit Cache",
   "id": "pre-commit-cache",
-  "version": "1.0.8",
-  "description": "Initialize pre-commit cache for your project",
+  "version": "1.0.9",
+  "description": "Initialize pre-commit cache with optional preloading of common hooks",
   "documentationURL": "https://pre-commit.com/",
+  "options": {
+    "preloadHooks": {
+      "type": "boolean",
+      "default": true,
+      "description": "Preload a set of common pre-commit hooks into the cache"
+    }
+  },
   "mounts": [
     {
       "source": "${devcontainerId}-pre-commit-cache",
       "target": "/pre_commit_cache",
       "type": "volume"
     }
-  ]
+  ],
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/python:1",
+    "ghcr.io/devcontainers/features/go:1",
+    "ghcr.io/devcontainers/features/rust:1",
+    "ghcr.io/devcontainers/features/node:1"
+  ],
+  "dependsOn": {
+    "ghcr.io/devcontainers-extra/features/curl-apt-get:1": {},
+    "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  }
 }

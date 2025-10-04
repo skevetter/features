@@ -6,48 +6,100 @@ set -eo pipefail
 
 USERNAME="${USERNAME:-${_REMOTE_USER:-"vscode"}}"
 PRE_COMMIT_CACHE_DIR="/pre_commit_cache"
-NANOLAYER_VERSION="v0.5.6"
 
-main() {
-    echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
-    ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
+install_config() {
+    local config_file="${1:-base}"
+    pre-commit install --install-hooks -c "config/$config_file.yaml"
+}
 
-    CACHE_CONFIGURATION="
-# Pre-commit Cache Configuration
-export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR
-"
+preload() {
+    echo "Preloading pre-commit hooks into cache directory: ${PRE_COMMIT_CACHE_DIR}"
 
-    CACHE_CONFIG_B64=$(echo "$CACHE_CONFIGURATION" | base64 -w 0)
+    export PATH="/usr/local/py-utils/bin:$PATH"
 
-    # shellcheck disable=SC2154
-    "${nanolayer_location}" \
-        install \
-        devcontainer-feature \
-        "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="echo ${CACHE_CONFIG_B64} | base64 -d | tee -a /etc/profile.d/pre_commit_cache.sh /etc/bash.bashrc > /dev/null"
-
-    if [ -f /etc/zsh/zshrc ]; then
-        "${nanolayer_location}" \
-            install \
-            devcontainer-feature \
-            "ghcr.io/devcontainers-extra/features/bash-command:1" \
-            --option command="echo ${CACHE_CONFIG_B64} | base64 -d | tee -a /etc/zsh/zshrc > /dev/null"
+    if ! command -v pre-commit &>/dev/null; then
+        echo "pre-commit not found, installation failed"
+        exit 1
     fi
 
-    PRE_COMMIT_CACHE_DIR_SCRIPT="
-    mkdir -p ${PRE_COMMIT_CACHE_DIR}
-    chmod 700 ${PRE_COMMIT_CACHE_DIR}
-    chown -R ${USERNAME} ${PRE_COMMIT_CACHE_DIR}
-    "
+    # Temporarily initialize a git repository to allow pre-commit to install hooks.
+    # This is required because pre-commit refuses to install hooks outside of a git repo.
+    git init -q
+    git config user.name 'Dev Container Features'
+    git config user.email 'dev@container'
+    git config --local init.defaultBranch main
 
-    PRE_COMMIT_CACHE_DIR_B64=$(printf '%s' "$PRE_COMMIT_CACHE_DIR_SCRIPT" | base64 -w 0)
+    install_config
+    install_config "lua"
+    install_config "shell"
+    install_config "actions"
 
-    # shellcheck disable=SC2154
-    "${nanolayer_location}" \
-        install \
-        devcontainer-feature \
-        "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="echo ${PRE_COMMIT_CACHE_DIR_B64} | base64 -d | bash"
+    if command -v python3 &>/dev/null || command -v python &>/dev/null; then
+        install_config "python"
+    fi
+
+    if command -v go &>/dev/null; then
+        install_config "golang"
+    fi
+
+    if command -v rustc &>/dev/null; then
+        install_config "rust"
+    fi
+
+    if command -v node &>/dev/null; then
+        install_config "biome"
+    fi
+
+    if command -v terraform &>/dev/null; then
+        install_config "terraform"
+    fi
+
+    rm -rf .git
+}
+
+main() {
+    export PRE_COMMIT_HOME="${PRE_COMMIT_CACHE_DIR}"
+
+    # Create pre-commit cache directory
+    mkdir -p "${PRE_COMMIT_CACHE_DIR}"
+    chmod 700 "${PRE_COMMIT_CACHE_DIR}"
+
+    if [ "${PRELOADHOOKS}" = "true" ]; then
+        preload
+    fi
+
+    # Create group
+    groupadd pre-commit
+
+    # Add the user to the group
+    usermod -aG pre-commit "$USERNAME"
+
+    # Set group ownership
+    chown -R :"pre-commit" "$PRE_COMMIT_HOME"
+
+    # Allow user to update the cache
+    chmod -R g+rwX "$PRE_COMMIT_HOME"
+
+    # Update shell profiles
+    {
+        echo ""
+        echo "# Pre-commit Cache Configuration"
+        echo "export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR"
+    } >> /etc/profile.d/pre_commit_cache.sh
+
+    {
+        echo ""
+        echo "# Pre-commit Cache Configuration"
+        echo "export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR"
+    } >> /etc/bash.bashrc
+
+    if [ -f /etc/zsh/zshrc ]; then
+        {
+            echo ""
+            echo "# Pre-commit Cache Configuration"
+            echo "export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR"
+        } >> /etc/zsh/zshrc
+    fi
 
     echo "Done!"
 }
