@@ -1,0 +1,16 @@
+{
+  "name": "Amazon Q CLI",
+  "id": "amazon-q-cli",
+  "version": "1.0.0",
+  "description": "Installs Amazon Q CLI for AWS development",
+  "documentationURL": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/command-line-installing.html",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest"],
+      "default": "latest",
+      "description": "Version of Amazon Q CLI to install"
+    }
+  },
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+}

@@ -27,6 +27,8 @@ jobs:
         id: filter
         with:
           filters: |
+            amazon-q-cli:
+              - './**/amazon-q-cli/**'
             biome:
               - './**/biome/**'
             catppuccin:
