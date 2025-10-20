@@ -48,7 +48,7 @@ echo "Testing Biome functionality..."
 check "biome help works" biome --help
 
 # Test that biome can check a simple file
-echo '{"test": true}' > /tmp/test.json
+echo '{ "test": true }' > /tmp/test.json
 check "biome check works" biome check /tmp/test.json
 
 #------------------------------------------------------------------------------
