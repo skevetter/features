@@ -1,167 +1,143 @@
-clean_download() {
-    # The purpose of this function is to download a file with minimal impact on container layer size
-    # this means if no valid downloader is found (curl or wget) then we install a downloader (currently wget) in a
-    # temporary manner, and making sure to
-    # 1. uninstall the downloader at the return of the function
-    # 2. revert back any changes to the package installer database/cache (for example apt-get lists)
-    # The above steps will minimize the leftovers being created while installing the downloader
-    # Supported distros:
-    #  debian/ubuntu/alpine
-
-    url=$1
-    output_location=$2
-    tempdir=$(mktemp -d)
-    downloader_installed=""
-
-    _apt_get_install() {
-        tempdir=$1
-
-        # copy current state of apt list - in order to revert back later (minimize contianer layer size)
-        cp -p -R /var/lib/apt/lists "$tempdir"
-        apt-get update -y
-        apt-get -y install --no-install-recommends wget ca-certificates
-    }
-
-    _apt_get_cleanup() {
-        tempdir=$1
-
-        echo "removing wget"
-        apt-get -y purge wget --auto-remove
-
-        echo "revert back apt lists"
-        rm -rf /var/lib/apt/lists/*
-        rm -r /var/lib/apt/lists && mv "$tempdir"/lists /var/lib/apt/lists
-    }
-
-    _apk_install() {
-        tempdir=$1
-        # copy current state of apk cache - in order to revert back later (minimize contianer layer size)
-        cp -p -R /var/cache/apk "$tempdir"
-
-        apk add --no-cache  wget
-    }
-
-    _apk_cleanup() {
-        tempdir=$1
-
-        echo "removing wget"
-        apk del wget
-    }
-    # try to use either wget or curl if one of them already installer
-    if type curl >/dev/null 2>&1; then
-        downloader=curl
-    elif type wget >/dev/null 2>&1; then
-        downloader=wget
-    else
-        downloader=""
-    fi
-
-    # in case none of them is installed, install wget temporarly
-    if [ -z "$downloader" ] ; then
-        if [ -x "/usr/bin/apt-get" ] ; then
-            _apt_get_install "$tempdir"
-        elif [ -x "/sbin/apk" ] ; then
-            _apk_install "$tempdir"
-        else
-            echo "distro not supported"
-            exit 1
-        fi
-        downloader="wget"
-        downloader_installed="true"
-    fi
-
-    if [ "$downloader" = "wget" ] ; then
-        wget -q "$url" -O "$output_location"
-    else
-        curl -sfL "$url" -o "$output_location"
-    fi
-
-    # NOTE: the cleanup procedure was not implemented using `trap X RETURN` only because
-    # alpine lack bash, and RETURN is not a valid signal under sh shell
-    if [ -n "$downloader_installed" ] ; then
-        if [ -x "/usr/bin/apt-get" ] ; then
-            _apt_get_cleanup "$tempdir"
-        elif [ -x "/sbin/apk" ] ; then
-            _apk_cleanup "$tempdir"
-        else
-            echo "distro not supported"
-            exit 1
-        fi
-    fi
-
+is_apt_system() { [ -x "/usr/bin/apt-get" ]; }
+is_apk_system() { [ -x "/sbin/apk" ]; }
+is_supported_platform() {
+    local os
+    os=$(uname -s)
+    local arch
+    arch=$(uname -m)
+    { [ "$os" = "Linux" ] || [ "$os" = "Darwin" ]; } && { [ "$arch" = "x86_64" ] || [ "$arch" = "aarch64" ] || [ "$arch" = "arm64" ]; }
 }
 
-ensure_nanolayer() {
-    # Ensure existance of the nanolayer cli program
-    local variable_name=$1
-
-    local required_version=$2
-
-    local __nanolayer_location=""
-
-    # If possible - try to use an already installed nanolayer
-    if [ -z "${NANOLAYER_FORCE_CLI_INSTALLATION}" ]; then
-        if [ -z "${NANOLAYER_CLI_LOCATION}" ]; then
-            if type nanolayer >/dev/null 2>&1; then
-                echo "Found a pre-existing nanolayer in PATH"
-                __nanolayer_location=nanolayer
-            fi
-        elif [ -f "${NANOLAYER_CLI_LOCATION}" ] && [ -x "${NANOLAYER_CLI_LOCATION}" ] ; then
-            __nanolayer_location=${NANOLAYER_CLI_LOCATION}
-            echo "Found a pre-existing nanolayer which were given in env variable: $__nanolayer_location"
-        fi
-
-        # make sure its of the required version
-        if ! [ -z "${__nanolayer_location}" ]; then
-            local current_version
-            current_version=$($__nanolayer_location --version)
-
-            if ! [ "$current_version" == "$required_version" ]; then
-                echo "skipping usage of pre-existing nanolayer. (required version $required_version does not match existing version $current_version)"
-                __nanolayer_location=""
-            fi
-        fi
-
+has_curl() { type curl >/dev/null 2>&1; }
+has_wget() { type wget >/dev/null 2>&1; }
+get_downloader() {
+    if has_curl; then
+        echo "curl"
+    elif has_wget; then
+        echo "wget"
+    else
+        echo ""
     fi
+}
 
-    # If not previuse installation found, download it temporarly and delete at the end of the script
-    if [ -z "${__nanolayer_location}" ]; then
+backup_apt_state() { cp -pR /var/lib/apt/lists "$1"; }
+restore_apt_state() {
+    rm -rf /var/lib/apt/lists/*
+    mv "$1"/lists /var/lib/apt/lists
+}
+install_wget_apt() { apt-get update -y && apt-get -y install --no-install-recommends wget ca-certificates; }
+remove_wget_apt() { apt-get -y purge wget --auto-remove; }
 
-        if [ "$(uname -sm)" = 'Linux x86_64' ] || [ "$(uname -sm)" = "Linux aarch64" ]; then
-            tmp_dir=$(mktemp -d -t nanolayer-XXXXXXXXXX)
+backup_apk_state() { cp -pR /var/cache/apk "$1"; }
+install_wget_apk() { apk add --no-cache wget; }
+remove_wget_apk() { apk del wget; }
 
-            # shellcheck disable=SC2329
-            clean_up () {
-                ARG=$?
-                rm -rf "$tmp_dir"
-                exit "$ARG"
-            }
-            trap clean_up EXIT
+download_file() {
+    local url="$1" output="$2" downloader
+    downloader=$(get_downloader)
 
-
-            if [ -x "/sbin/apk" ] ; then
-                clib_type=musl
-            else
-                clib_type=gnu
-            fi
-
-            tar_filename=nanolayer-"$(uname -m)"-unknown-linux-$clib_type.tgz
-
-            # clean download will minimize leftover in case a downloaderlike wget or curl need to be installed
-            clean_download https://github.com/devcontainers-extra/nanolayer/releases/download/"$required_version"/"$tar_filename" "$tmp_dir"/"$tar_filename"
-
-            tar xfzv "$tmp_dir"/"$tar_filename" -C "$tmp_dir"
-            chmod a+x "$tmp_dir"/nanolayer
-            __nanolayer_location=$tmp_dir/nanolayer
-
-
+    if [ -z "$downloader" ]; then
+        local tempdir
+        tempdir=$(mktemp -d)
+        if is_apt_system; then
+            backup_apt_state "$tempdir"
+            install_wget_apt
+            wget --no-check-certificate -O "$output" "$url" || return 1
+            remove_wget_apt
+            restore_apt_state "$tempdir"
+        elif is_apk_system; then
+            backup_apk_state "$tempdir"
+            install_wget_apk
+            wget --no-check-certificate -O "$output" "$url" || return 1
+            remove_wget_apk
         else
-            echo "No binaries compiled for non-x86-linux architectures yet: $(uname -m)"
-            exit 1
+            echo "Unsupported system" >&2
+            return 1
+        fi
+        rm -rf "$tempdir"
+    elif [ "$downloader" = "curl" ]; then
+        curl -fsSL "$url" -o "$output" || return 1
+    elif [ "$downloader" = "wget" ]; then
+        wget --no-check-certificate -O "$output" "$url" || return 1
+    else
+        echo "Unknown downloader: $downloader" >&2
+        return 1
+    fi
+}
+
+ensure_cli_tool() {
+    local tool_name="$1" version="$2" url="$3"
+    local location=""
+
+    if [ -z "${PICOLAYER_FORCE_CLI_INSTALLATION}" ]; then
+        local env_var="${tool_name^^}_CLI_LOCATION"
+        local env_location
+        env_location=$(eval echo "\$${env_var}")
+
+        if [ -z "$env_location" ] && type "$tool_name" >/dev/null 2>&1; then
+            echo "Found pre-existing $tool_name in PATH"
+            location="$tool_name"
+        elif [ -f "$env_location" ] && [ -x "$env_location" ]; then
+            echo "Found pre-existing $tool_name at: $env_location"
+            location="$env_location"
+        fi
+
+        if [ -n "$location" ]; then
+            local current_version
+            current_version=$($location --version 2>/dev/null || echo "")
+            if [ "$current_version" != "$version" ]; then
+                echo "Version mismatch for $tool_name (required: $version, found: $current_version)"
+                location=""
+            fi
         fi
     fi
 
-    # Expose outside the resolved location
-    export "${variable_name}"="$__nanolayer_location"
+    if [ -z "$location" ]; then
+        if ! is_supported_platform; then
+            echo "No binaries for $(uname -sm)" >&2
+            return 1
+        fi
 
+        local tmp_dir
+        tmp_dir=$(mktemp -d -t "$tool_name-XXXXXXXXXX")
+        trap 'rm -rf $tmp_dir' EXIT
+
+        local archive
+        archive="$tmp_dir/$(basename "$url")"
+        download_file "$url" "$archive"
+        tar xfz "$archive" -C "$tmp_dir"
+        chmod +x "$tmp_dir/$tool_name"
+        location="$tmp_dir/$tool_name"
+    fi
+
+    export PICOLAYER_BIN="$location"
+}
+
+ensure_picolayer() {
+    local version="${1:-latest}"
+    local os
+    os=$(uname -s)
+    local arch
+    arch=$(uname -m)
+
+    case "$os" in
+    Linux) os="unknown-linux-gnu" ;;
+    Darwin) os="apple-darwin" ;;
+    *)
+        echo "Unsupported OS: $os" >&2
+        return 1
+        ;;
+    esac
+
+    case "$arch" in
+    x86_64) arch="x86_64" ;;
+    aarch64 | arm64) arch="aarch64" ;;
+    *)
+        echo "Unsupported architecture: $arch" >&2
+        return 1
+        ;;
+    esac
+
+    local url="https://github.com/skevetter/picolayer/releases/$version/download/picolayer-$arch-$os.tar.gz"
+    ensure_cli_tool "picolayer" "$version" "$url"
 }
