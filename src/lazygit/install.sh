@@ -4,19 +4,12 @@ set -eo pipefail
 
 . ./lib.sh
 
-NANOLAYER_VERSION="v0.5.6"
-
 main() {
-    echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
-    ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
+     echo "Ensuring picolayer CLI is available"
+    ensure_picolayer
 
     echo "Installing Lazygit (version: ${VERSION})"
-    # shellcheck disable=SC2154
-    "${nanolayer_location}" \
-        install \
-        devcontainer-feature \
-        "ghcr.io/devcontainers-extra/features/gh-release:1" \
-        --option repo="jesseduffield/lazygit" --option binaryNames="lazygit" --option version="${VERSION}"
+    "${PICOLAYER_BIN}" gh-release --owner jesseduffield --repo lazygit --version "$VERSION"
 
     echo "Done!"
 }
