@@ -138,6 +138,43 @@ ensure_picolayer() {
         ;;
     esac
 
-    local url="https://github.com/skevetter/picolayer/releases/$version/download/picolayer-$arch-$os.tar.gz"
+    if [ "$version" = "latest" ]; then
+        echo "Fetching latest picolayer release"
+
+        latest_release_json=$(curl -s https://api.github.com/repos/skevetter/picolayer/releases/latest)
+        tag_name_line=$(echo "$latest_release_json" | grep '"tag_name":')
+        latest_version=$(echo "$tag_name_line" | cut -d'"' -f4)
+
+        if [ -z "$latest_version" ]; then
+            echo "Error: Failed to fetch latest release from GitHub API" >&2
+            return 1
+        fi
+
+        echo "Latest release: $latest_version"
+
+        release_json=$(curl -s "https://api.github.com/repos/skevetter/picolayer/releases/tags/$latest_version")
+        asset_names=$(echo "$release_json" | grep '"name":.*\.tar\.gz')
+        asset_count=$(echo "$asset_names" | grep -c '"name":')
+
+        if [ "$asset_count" -eq 0 ]; then
+            echo "Error: Latest release $latest_version has no assets" >&2
+            echo "Available releases:" >&2
+
+            all_releases=$(curl -s https://api.github.com/repos/skevetter/picolayer/releases)
+            tag_name_lines=$(echo "$all_releases" | grep '"tag_name":')
+            first_five_tags=$(echo "$tag_name_lines" | head -5)
+            tag_versions=$(echo "$first_five_tags" | cut -d'"' -f4)
+            if [ -n "$tag_versions" ]; then
+                prefixed_tags=$'  - '"${tag_versions//$'\n'/$'\n  - '}"
+                printf '%s\n' "$prefixed_tags" >&2
+            fi
+
+            return 1
+        fi
+
+        version="$latest_version"
+    fi
+
+    local url="https://github.com/skevetter/picolayer/releases/download/$version/picolayer-$arch-$os.tar.gz"
     ensure_cli_tool "picolayer" "$version" "$url"
 }
