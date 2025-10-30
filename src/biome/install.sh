@@ -3,7 +3,7 @@
 set -eo pipefail
 
 setup_picolayer() {
-    PICOLAYER_BIN=$(curl -fsSL  https://raw.githubusercontent.com/skevetter/picolayer/refs/heads/main/install.sh | bash)
+    PICOLAYER_BIN=$(curl -fsSL  https://raw.githubusercontent.com/skevetter/picolayer/main/install.sh | bash)
 }
 
 
