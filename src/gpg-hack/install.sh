@@ -2,11 +2,7 @@
 
 set -eo pipefail
 
-. ./lib.sh
-
-NANOLAYER_VERSION="v0.5.6"
-
-gpg_setup() {
+main() {
     {
         echo ""
         echo "# GPG Configuration"
@@ -40,18 +36,6 @@ gpg_setup() {
         echo "# Enable SSH support"
         echo "enable-ssh-support"
     } >> /etc/gnupg/gpg-agent.conf
-}
-
-main() {
-    echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
-    ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
-
-    # shellcheck disable=SC2154
-    "${nanolayer_location}" \
-        install \
-        devcontainer-feature \
-        "ghcr.io/devcontainers-extra/features/bash-command:1" \
-        --option command="$(gpg_setup)"
 
     echo "Done!"
 }
