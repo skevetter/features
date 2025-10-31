@@ -9,11 +9,13 @@ main() {
         echo "export GPG_TTY=\$(tty)"
     } >> /etc/bash.bashrc
 
-    {
-        echo ""
-        echo "# GPG Configuration"
-        echo "export GPG_TTY=\$(tty)"
-    } >> /etc/zsh/zshrc
+    if [ -f /etc/zsh/zshrc ]; then
+        {
+            echo ""
+            echo "# GPG Configuration"
+            echo "export GPG_TTY=\$(tty)"
+        } >> /etc/zsh/zshrc
+    fi
 
     mkdir -p /etc/gnupg
 
