@@ -2,13 +2,32 @@
 
 set -eo pipefail
 
-. ./lib.sh
+setup_picolayer() {
+    PICOLAYER_BIN=$(curl -fsSL  https://raw.githubusercontent.com/skevetter/picolayer/main/install.sh | bash)
+}
 
-NANOLAYER_VERSION="v0.5.6"
+setup() {
+    if command -v apt-get >/dev/null 2>&1; then
+        apt-get update && apt-get install -y curl
+    elif command -v apk >/dev/null 2>&1; then
+        apk add --no-cache curl
+    else
+        echo "No supported package manager found" >&2; return 1
+    fi
+
+    setup_picolayer
+}
+
+cleanup() {
+    if command -v apt-get >/dev/null 2>&1; then
+        apt-get remove -y curl && apt-get autoremove -y && apt-get clean
+    elif command -v apk >/dev/null 2>&1; then
+        apk del curl
+    fi
+}
 
 main() {
-    echo "Ensuring nanolayer CLI (${NANOLAYER_VERSION}) is available"
-    ensure_nanolayer nanolayer_location "${NANOLAYER_VERSION}"
+    setup
 
     case "$(uname -s)" in
         Linux)
@@ -37,16 +56,12 @@ main() {
 
     asset_regex="nvim-${os}-${arch}\\.tar\\.gz$"
 
-    echo "Detected OS=${os} ARCH=${arch} -> assetRegex=${asset_regex}"
+    echo "Detected OS=${os} ARCH=${arch} -> Filter=${asset_regex}"
 
-    # shellcheck disable=SC2154
-    "${nanolayer_location}" \
-        install \
-        devcontainer-feature \
-        "ghcr.io/devcontainers-extra/features/gh-release:1" \
-        --option repo='neovim/neovim' --option binaryNames='nvim' --option assetRegex="${asset_regex}" --option version="$VERSION"
+    "${PICOLAYER_BIN}" gh-release --owner neovim --repo neovim --binary nvim --filter "${asset_regex}" --version "$VERSION"
 
     echo "Done!"
+    cleanup
 }
 
 main "$@"
