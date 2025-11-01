@@ -1,6 +1,6 @@
 {
   "id": "prek",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "prek",
   "documentationURL": "https://github.com/j178/prek",
   "description": "prek is a reimagined version of pre-commit, built in Rust. It is designed to be a faster, dependency-free and drop-in alternative for it, while also providing some additional long-requested features",
@@ -11,5 +11,6 @@
       "proposals": ["latest"],
       "type": "string"
     }
-  }
+  },
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
 }
