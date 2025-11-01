@@ -1,6 +1,6 @@
 {
   "id": "neovim",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "neovim (via GitHub Releases)",
   "documentationURL": "https://github.com/neovim/neovim",
   "description": "Installs neovim from GitHub Releases.",
@@ -11,5 +11,6 @@
       "proposals": ["latest"],
       "type": "string"
     }
-  }
+  },
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
 }
