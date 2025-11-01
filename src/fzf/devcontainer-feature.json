@@ -1,6 +1,6 @@
 {
   "id": "fzf",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "name": "fzf (via Github Releases)",
   "documentationURL": "http://github.com/skevetter/features/tree/main/src/fzf",
   "description": "fzf is a general-purpose command-line fuzzy finder.",
@@ -12,5 +12,5 @@
       "type": "string"
     }
   },
-  "installsAfter": ["ghcr.io/devcontainers-extra/features/gh-release"]
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
 }
