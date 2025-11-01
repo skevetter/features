@@ -1,0 +1,20 @@
+{
+  "id": "picolayer",
+  "version": "1.0.0",
+  "name": "picolayer",
+  "documentationURL": "http://github.com/skevetter/features/tree/main/src/picolayer",
+  "description": "An installer utility for keeping container layers small",
+  "options": {
+    "installDirectory": {
+      "type": "string",
+      "default": "",
+      "description": "Destination path for install"
+    },
+    "version": {
+      "type": "string",
+      "default": "",
+      "description": "Version to install (e.g., v0.2.0). Default is latest."
+    }
+  },
+  "dependsOn": { "ghcr.io/skevetter/features/curl:1": {} }
+}

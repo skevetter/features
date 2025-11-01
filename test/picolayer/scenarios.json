@@ -1,0 +1,18 @@
+{
+  "option_version": {
+    "image": "mcr.microsoft.com/devcontainers/base:debian",
+    "features": {
+      "picolayer": {
+        "version": "v0.2.0"
+      }
+    }
+  },
+  "option_directory": {
+    "image": "mcr.microsoft.com/devcontainers/base:debian",
+    "features": {
+      "picolayer": {
+        "installDirectory": "/tmp/custom/picolayer"
+      }
+    }
+  }
+}

@@ -47,6 +47,8 @@ jobs:
               - './**/lazygit/**'
             neovim:
               - './**/neovim/**'
+            picolayer:
+              - './**/picolayer/**'
             pkgx:
               - './**/pkgx/**'
             pre-commit-cache:
