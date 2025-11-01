@@ -19,7 +19,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing pre-commit installation and cache directory..."
+echo "Testing pre-commit installation and cache directory"
 
 echo "Cache directory contents:"; ls -la ${PRE_COMMIT_CACHE_DIR}
 
@@ -57,7 +57,7 @@ fi
 # Hook Installation Verification
 #------------------------------------------------------------------------------
 
-echo "Verifying pre-installed hooks..."
+echo "Verifying pre-installed hooks"
 
 actual_hooks=$(find ${PRE_COMMIT_CACHE_DIR} -maxdepth 1 -mindepth 1 -type d -name 'repo*' | wc -l)
 
@@ -93,7 +93,7 @@ echo "================================"
 # Git Repository Setup
 #------------------------------------------------------------------------------
 
-echo "Setting up temporary git repository for testing..."
+echo "Setting up temporary git repository for testing"
 
 git init -q
 git config user.name 'Dev Container Features'
@@ -104,10 +104,10 @@ git config --local init.defaultBranch main
 # Pre-commit Functionality Tests
 #------------------------------------------------------------------------------
 
-echo "Testing pre-commit functionality..."
+echo "Testing pre-commit functionality"
 
 # Create sample configuration
-echo "Creating sample pre-commit configuration..."
+echo "Creating sample pre-commit configuration"
 pre-commit sample-config > .pre-commit-config.yaml; pre-commit autoupdate
 
 # Test hook installation
@@ -120,7 +120,7 @@ check "user can run all files" env PRE_COMMIT_HOME="${PRE_COMMIT_CACHE_DIR}" pre
 # Cleanup
 #------------------------------------------------------------------------------
 
-echo "Cleaning up test artifacts..."
+echo "Cleaning up test artifacts"
 rm -rf .git .pre-commit-config.yaml
 
 #------------------------------------------------------------------------------

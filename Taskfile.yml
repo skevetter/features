@@ -1,0 +1,14 @@
+version: "3"
+
+tasks:
+  update-precommit-hooks:
+    desc: Update pre-commit hooks to latest versions
+    cmds:
+      - ./hack/update-precommit-hooks.sh
+
+  test:
+    desc: "Test a specific feature (usage: task test FEATURE=neovim)"
+    requires:
+      vars: ["FEATURE"]
+    cmds:
+      - "devcontainer features test -i mcr.microsoft.com/devcontainers/base:debian -f {{.FEATURE}}"
