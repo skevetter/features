@@ -35,6 +35,8 @@ jobs:
               - './**/catppuccin/**'
             color:
               - './**/color/**'
+            curl:
+              - './**/curl/**'
             fzf:
               - './**/fzf/**'
             gpg-hack:

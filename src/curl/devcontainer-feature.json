@@ -1,0 +1,7 @@
+{
+  "id": "curl",
+  "version": "1.0.0",
+  "name": "curl",
+  "documentationURL": "http://github.com/skevetter/features/tree/main/src/curl",
+  "description": "cURL is a tool used to transfer data to or from a server using various protocols"
+}
