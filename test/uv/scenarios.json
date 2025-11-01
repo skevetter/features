@@ -9,7 +9,7 @@
     "image": "mcr.microsoft.com/devcontainers/base:debian",
     "features": {
       "uv": {
-        "version": "0.8.14"
+        "version": "0.9.7"
       }
     }
   }
