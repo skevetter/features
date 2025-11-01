@@ -15,7 +15,7 @@ Biome is a fast formatter for JavaScript, TypeScript, JSX, TSX, JSON, HTML, CSS 
 
 | Options Id | Description | Type | Default Value |
 |-----|-----|-----|-----|
-| version | Select the Biome version you would like to install | string | latest |
+| version | Version to install | string | latest |
 
 
 
