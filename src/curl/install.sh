@@ -3,8 +3,12 @@
 set -eo pipefail
 
 main() {
+    if command -v curl >/dev/null 2>&1; then
+        return 0 # curl is already installed
+    fi
+
     if command -v apt-get >/dev/null 2>&1; then
-        apt-get update && apt-get install -y curl && apt-get autoremove -y && apt-get clean
+        apt-get update && apt-get install -y curl && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
     elif command -v apk >/dev/null 2>&1; then
         apk add --no-cache curl
     else
