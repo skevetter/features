@@ -1,6 +1,6 @@
 {
   "id": "picolayer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "picolayer",
   "documentationURL": "http://github.com/skevetter/features/tree/main/src/picolayer",
   "description": "An installer utility for keeping container layers small",
