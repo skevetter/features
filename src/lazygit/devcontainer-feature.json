@@ -1,7 +1,7 @@
 {
   "name": "Lazygit",
   "id": "lazygit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lazygit is a simple terminal UI for git commands",
   "documentationURL": "https://github.com/jesseduffield/lazygit",
   "options": {
@@ -11,5 +11,6 @@
       "default": "latest",
       "description": "Select the Lazygit version you would like to install"
     }
-  }
+  },
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
 }
