@@ -1,6 +1,6 @@
 {
   "id": "pkgx",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "pkgx",
   "documentationURL": "https://github.com/pkgxdev/pkgx",
   "description": "pkgx is a 4 MiB, standalone binary that can run anything.",
@@ -12,7 +12,5 @@
       "type": "string"
     }
   },
-  "dependsOn": {
-    "ghcr.io/devcontainers-extra/features/curl-apt-get:1": {}
-  }
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
 }
