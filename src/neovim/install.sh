@@ -17,10 +17,10 @@ main() {
     esac
 
     case "$(uname -m)" in
-        x86_64|amd64)
+        x86_64 | amd64)
             arch="x86_64"
             ;;
-        aarch64|arm64)
+        aarch64 | arm64)
             arch="arm64"
             ;;
         *)

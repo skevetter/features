@@ -27,7 +27,6 @@ echo -e "\n"
 check "check purple is my favorite color" bash -c "color | grep 'my favorite color is purple'"
 check "check I am greeting with 'Greetings'" bash -c "hello | grep 'Greetings, $(whoami)'"
 
-
 # Report result
 # If any of the checks above exited with a non-zero exit code, the test will fail.
 reportResults

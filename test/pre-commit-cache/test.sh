@@ -21,7 +21,8 @@ echo "=========================================================="
 
 echo "Testing pre-commit installation and cache directory"
 
-echo "Cache directory contents:"; ls -la ${PRE_COMMIT_CACHE_DIR}
+echo "Cache directory contents:"
+ls -la ${PRE_COMMIT_CACHE_DIR}
 
 # Verify pre-commit cache directory exists and has correct ownership
 check "${PRE_COMMIT_CACHE_DIR} is present" test -d ${PRE_COMMIT_CACHE_DIR}
@@ -108,7 +109,8 @@ echo "Testing pre-commit functionality"
 
 # Create sample configuration
 echo "Creating sample pre-commit configuration"
-pre-commit sample-config > .pre-commit-config.yaml; pre-commit autoupdate
+pre-commit sample-config >.pre-commit-config.yaml
+pre-commit autoupdate
 
 # Test hook installation
 check "user can install hooks" env PRE_COMMIT_HOME="${PRE_COMMIT_CACHE_DIR}" pre-commit install --install-hooks

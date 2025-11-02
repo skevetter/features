@@ -9,14 +9,14 @@ main() {
         echo ""
         echo "# fzf Configuration"
         echo "eval \"\$(fzf --bash)\""
-    } >> /etc/bash.bashrc
+    } >>/etc/bash.bashrc
 
     if [ -f /etc/zsh/zshrc ]; then
         {
             echo ""
             echo "# fzf Configuration"
             echo "source <(fzf --zsh)"
-        } >> /etc/zsh/zshrc
+        } >>/etc/zsh/zshrc
     fi
 }
 

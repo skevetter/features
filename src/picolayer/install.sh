@@ -12,7 +12,7 @@ main() {
         export PICOLAYER_VERSION="$VERSION"
     fi
 
-    curl -fsSL  https://raw.githubusercontent.com/skevetter/picolayer/main/install.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/skevetter/picolayer/main/install.sh | bash
 }
 
 main "$@"

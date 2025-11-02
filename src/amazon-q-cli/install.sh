@@ -2,8 +2,14 @@
 set -e
 
 check_prerequisites() {
-    command -v q >/dev/null 2>&1 && { echo "Amazon Q CLI already installed"; exit 0; }
-    [[ "$(uname -s)" == "Linux" ]] || { echo "ERROR: Amazon Q CLI only supports Linux"; exit 1; }
+    command -v q >/dev/null 2>&1 && {
+        echo "Amazon Q CLI already installed"
+        exit 0
+    }
+    [[ "$(uname -s)" == "Linux" ]] || {
+        echo "ERROR: Amazon Q CLI only supports Linux"
+        exit 1
+    }
 }
 
 install_dependencies() {
@@ -18,7 +24,10 @@ get_architecture() {
     case $arch in
         x86_64) echo "x86_64" ;;
         aarch64) echo "aarch64" ;;
-        *) echo "ERROR: Unsupported architecture: $arch" >&2; exit 1 ;;
+        *)
+            echo "ERROR: Unsupported architecture: $arch" >&2
+            exit 1
+            ;;
     esac
 }
 
@@ -65,10 +74,10 @@ verify_installation() {
 
 setup_completion_and_integrations() {
     mkdir -p /etc/bash_completion.d
-    q completion bash > /etc/bash_completion.d/q
+    q completion bash >/etc/bash_completion.d/q
 
     mkdir -p /etc/profile.d
-    cat > /etc/profile.d/amazon-q.sh << 'EOF'
+    cat >/etc/profile.d/amazon-q.sh <<'EOF'
 export Q_TERM=1
 if [ -f /etc/bash_completion.d/q ]; then
     source /etc/bash_completion.d/q

@@ -7,14 +7,14 @@ main() {
         echo ""
         echo "# GPG Configuration"
         echo "export GPG_TTY=\$(tty)"
-    } >> /etc/bash.bashrc
+    } >>/etc/bash.bashrc
 
     if [ -f /etc/zsh/zshrc ]; then
         {
             echo ""
             echo "# GPG Configuration"
             echo "export GPG_TTY=\$(tty)"
-        } >> /etc/zsh/zshrc
+        } >>/etc/zsh/zshrc
     fi
 
     mkdir -p /etc/gnupg
@@ -22,7 +22,7 @@ main() {
     {
         echo "use-agent"
         echo "pinentry-mode loopback"
-    } >> /etc/gnupg/gpg.conf
+    } >>/etc/gnupg/gpg.conf
 
     {
         echo "allow-loopback-pinentry"
@@ -37,7 +37,7 @@ main() {
         echo ""
         echo "# Enable SSH support"
         echo "enable-ssh-support"
-    } >> /etc/gnupg/gpg-agent.conf
+    } >>/etc/gnupg/gpg-agent.conf
 
     echo "Done!"
 }

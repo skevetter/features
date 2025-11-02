@@ -12,7 +12,8 @@ main() {
     elif command -v apk >/dev/null 2>&1; then
         apk add --no-cache curl
     else
-        echo "No supported package manager found" >&2; return 1
+        echo "No supported package manager found" >&2
+        return 1
     fi
 }
 

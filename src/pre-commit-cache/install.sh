@@ -85,20 +85,20 @@ main() {
         echo ""
         echo "# Pre-commit Cache Configuration"
         echo "export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR"
-    } >> /etc/profile.d/pre_commit_cache.sh
+    } >>/etc/profile.d/pre_commit_cache.sh
 
     {
         echo ""
         echo "# Pre-commit Cache Configuration"
         echo "export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR"
-    } >> /etc/bash.bashrc
+    } >>/etc/bash.bashrc
 
     if [ -f /etc/zsh/zshrc ]; then
         {
             echo ""
             echo "# Pre-commit Cache Configuration"
             echo "export PRE_COMMIT_HOME=$PRE_COMMIT_CACHE_DIR"
-        } >> /etc/zsh/zshrc
+        } >>/etc/zsh/zshrc
     fi
 
     echo "Done!"

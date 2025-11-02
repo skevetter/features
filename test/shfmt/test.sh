@@ -48,7 +48,7 @@ echo "Testing shfmt functionality..."
 check "shfmt help works" shfmt --help
 
 # Test basic formatting functionality
-echo -e '#!/bin/bash\necho "test"' > /tmp/test.sh
+echo -e '#!/bin/bash\necho "test"' >/tmp/test.sh
 check "shfmt can format shell script" shfmt /tmp/test.sh
 
 #------------------------------------------------------------------------------
