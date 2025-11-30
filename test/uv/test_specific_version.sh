@@ -16,7 +16,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing uv installation..."
+echo "Testing uv installation"
 
 # Verify uv command exists and is executable
 check "uv command exists" command -v uv
@@ -31,7 +31,7 @@ check "uv version is 0.9.7" sh -c "uv --version | grep '0.9.7'"
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of uv command
 UV_PATH=$(command -v uv)
@@ -45,7 +45,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing uv functionality..."
+echo "Testing uv functionality"
 
 # Test help command works
 check "uv help works" uv --help

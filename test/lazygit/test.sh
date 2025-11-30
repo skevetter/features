@@ -16,7 +16,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing lazygit installation..."
+echo "Testing lazygit installation"
 
 # Verify lazygit command exists and is executable
 check "lazygit command exists" command -v lazygit
@@ -28,7 +28,7 @@ check "lazygit version works" lazygit --version
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of lazygit command
 LAZYGIT_PATH=$(command -v lazygit)
@@ -42,7 +42,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing lazygit functionality..."
+echo "Testing lazygit functionality"
 
 # Test help command works
 check "lazygit help works" lazygit --help

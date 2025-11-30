@@ -76,7 +76,7 @@ if [ "$(id -u)" -eq 0 ]; then
     exit 0
 fi
 
-echo "Testing user permissions and group membership..."
+echo "Testing user permissions and group membership"
 
 # Verify vscode user exists and has correct group membership
 check "user vscode exists" id -u vscode

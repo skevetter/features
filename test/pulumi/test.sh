@@ -16,7 +16,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing pulumi installation..."
+echo "Testing pulumi installation"
 
 # Verify pulumi command exists and is executable
 check "pulumi command exists" command -v pulumi
@@ -28,7 +28,7 @@ check "pulumi version works" pulumi version
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of pulumi command
 PULUMI_PATH=$(command -v pulumi)
@@ -42,7 +42,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing pulumi functionality..."
+echo "Testing pulumi functionality"
 
 # Test help command works
 check "pulumi help works" pulumi --help

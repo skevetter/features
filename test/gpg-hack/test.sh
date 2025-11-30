@@ -16,7 +16,7 @@ echo "=========================================================="
 # Configuration File Checks
 #------------------------------------------------------------------------------
 
-echo "Testing GPG configuration files..."
+echo "Testing GPG configuration files"
 
 check "verify /etc/gnupg/gpg.conf is present" test -f /etc/gnupg/gpg.conf
 check "verify /etc/gnupg/gpg-agent.conf is present" test -f /etc/gnupg/gpg-agent.conf
@@ -25,7 +25,7 @@ check "verify /etc/gnupg/gpg-agent.conf is present" test -f /etc/gnupg/gpg-agent
 # Shell Configuration Checks
 #------------------------------------------------------------------------------
 
-echo "Testing shell configuration..."
+echo "Testing shell configuration"
 
 check "verify GPG_TTY is set in bashrc" grep -q "export GPG_TTY=\$(tty)" /etc/bash.bashrc
 

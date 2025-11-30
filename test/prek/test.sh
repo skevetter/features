@@ -16,7 +16,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing prek installation..."
+echo "Testing prek installation"
 
 # Verify prek command exists and is executable
 check "prek command exists" command -v prek
@@ -28,7 +28,7 @@ check "prek version works" prek --version
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of prek command
 PREK_PATH=$(command -v prek)
@@ -42,7 +42,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing prek functionality..."
+echo "Testing prek functionality"
 
 # Test help command works
 check "prek help works" prek --help

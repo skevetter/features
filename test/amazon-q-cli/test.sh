@@ -18,7 +18,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing Amazon Q CLI installation..."
+echo "Testing Amazon Q CLI installation"
 
 # Verify main q command exists and is executable
 check "q command exists" command -v q
@@ -36,7 +36,7 @@ check "q version works" q --version
 # Completion and Integration Checks
 #------------------------------------------------------------------------------
 
-echo "Testing bash completion and shell integrations..."
+echo "Testing bash completion and shell integrations"
 
 # Verify bash completion file exists
 check "bash completion file exists" test -f ${COMPLETION_FILE}
@@ -54,7 +54,7 @@ check "bash completion sourced in profile.d" grep -q 'source /etc/bash_completio
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of q command
 Q_PATH=$(command -v q)
@@ -78,7 +78,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing Amazon Q CLI functionality..."
+echo "Testing Amazon Q CLI functionality"
 
 # Test help command works
 check "q help works" q --help

@@ -4,7 +4,7 @@ set -e
 
 source dev-container-features-test-lib
 
-echo "Testing picolayer with temp directory creation..."
+echo "Testing picolayer with temp directory creation"
 
 # Verify the custom directory was created
 check "custom directory exists" test -d "/tmp/custom/picolayer"

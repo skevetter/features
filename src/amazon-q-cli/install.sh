@@ -47,10 +47,10 @@ download_and_install() {
     temp_dir=$(mktemp -d)
 
     cd "$temp_dir"
-    echo "Downloading Amazon Q CLI..."
+    echo "Downloading Amazon Q CLI"
     curl -sSfL "https://desktop-release.q.us-east-1.amazonaws.com/latest/q-${arch_name}-linux${suffix}.zip" -o q.zip
 
-    echo "Installing Amazon Q CLI..."
+    echo "Installing Amazon Q CLI"
     unzip -q q.zip
 
     # Extract binaries manually since installer doesn't support root
