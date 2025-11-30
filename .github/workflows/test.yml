@@ -59,6 +59,8 @@ jobs:
               - './**/protoc/**'
             pulumi:
               - './**/pulumi/**'
+            shellcheck:
+              - './**/shellcheck/**'
             shell-history:
               - './**/shell-history/**'
             shfmt:
