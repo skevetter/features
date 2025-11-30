@@ -1,0 +1,8 @@
+{
+  "id": "protoc",
+  "version": "1.0.0",
+  "name": "protobuf-compiler",
+  "documentationURL": "https://github.com/google/protobuf/",
+  "description": "The Protocol Buffers compiler (protoc) is a tool that generates code from .proto files for various programming languages.",
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
+}

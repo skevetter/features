@@ -55,6 +55,8 @@ jobs:
               - './**/pre-commit-cache/**'
             prek:
               - './**/prek/**'
+            protoc:
+              - './**/protoc/**'
             pulumi:
               - './**/pulumi/**'
             shell-history:
