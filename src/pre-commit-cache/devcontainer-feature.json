@@ -1,7 +1,7 @@
 {
   "name": "Pre-commit Cache",
   "id": "pre-commit-cache",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Initialize pre-commit cache with optional preloading of common hooks",
   "documentationURL": "https://pre-commit.com/",
   "options": {
@@ -26,6 +26,7 @@
   ],
   "dependsOn": {
     "ghcr.io/skevetter/features/curl:1": {},
+    "ghcr.io/skevetter/features/shellcheck:1": {},
     "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
     "ghcr.io/devcontainers/features/git:1": {}
   }
