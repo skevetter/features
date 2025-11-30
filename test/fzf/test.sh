@@ -4,6 +4,8 @@ set -e
 
 source dev-container-features-test-lib
 
+USERNAME="${_REMOTE_USER:-"vscode"}"
+
 #------------------------------------------------------------------------------
 # Environment
 #------------------------------------------------------------------------------
@@ -41,6 +43,19 @@ if [ -f /etc/zsh/zshrc ]; then
     check "zshrc includes fzf" grep -F "fzf" /etc/zsh/zshrc
 else
     echo "zshrc file does not exist; skipping fzf configuration check for zshrc"
+fi
+
+#------------------------------------------------------------------------------
+# Check User .zshrc (when oh-my-zsh is installed)
+#------------------------------------------------------------------------------
+
+HOME_DIR="/home/${USERNAME}"
+if [ -d "${HOME_DIR}/.oh-my-zsh" ]; then
+    echo "oh-my-zsh is installed; checking user .zshrc for fzf configuration"
+    ZSHRC="${HOME_DIR}/.zshrc"
+    check "user .zshrc includes fzf" grep -F "fzf --zsh" "${ZSHRC}"
+else
+    echo "oh-my-zsh is not installed; skipping user .zshrc check"
 fi
 
 #------------------------------------------------------------------------------
