@@ -4,5 +4,9 @@
   "version": "1.0.0",
   "description": "Installs the Kiro CLI tool",
   "documentationURL": "https://kiro.dev/docs/cli/",
-  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"],
+  "dependsOn": {
+    "ghcr.io/skevetter/features/curl:1": {},
+    "ghcr.io/skevetter/features/zip:1": {}
+  }
 }

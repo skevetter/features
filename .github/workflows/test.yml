@@ -69,6 +69,8 @@ jobs:
               - './**/shfmt/**'
             uv:
               - './**/uv/**'
+            zip:
+              - './**/zip/**'
 
   test-scenarios:
     runs-on: ubuntu-latest
