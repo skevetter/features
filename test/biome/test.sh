@@ -16,7 +16,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing Biome installation..."
+echo "Testing Biome installation"
 
 # Verify biome command exists and is executable
 check "biome command exists" command -v biome
@@ -28,7 +28,7 @@ check "biome version works" biome version
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of biome command
 BIOME_PATH=$(command -v biome)
@@ -42,7 +42,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing Biome functionality..."
+echo "Testing Biome functionality"
 
 # Test help command works
 check "biome help works" biome --help

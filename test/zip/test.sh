@@ -16,13 +16,13 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing pulumi installation"
+echo "Testing zip installation"
 
-# Verify pulumi command exists and is executable
-check "pulumi command exists" command -v pulumi
+# Verify zip command exists and is executable
+check "zip command exists" command -v zip
 
-# Verify pulumi version works
-check "pulumi version works" pulumi version
+# Verify zip version works
+check "zip version works" zip --version
 
 #------------------------------------------------------------------------------
 # Binary Location Verification
@@ -30,22 +30,31 @@ check "pulumi version works" pulumi version
 
 echo "Testing binary locations and permissions"
 
-# Get the actual path of pulumi command
-PULUMI_PATH=$(command -v pulumi)
-check "pulumi binary is executable" test -x "${PULUMI_PATH}"
+# Get the actual path of zip command
+ZIP_PATH=$(command -v zip)
+check "zip binary is executable" test -x "${ZIP_PATH}"
 
 echo "=== Binary Locations ==="
-echo "pulumi is located at: ${PULUMI_PATH}"
+echo "zip is located at: ${ZIP_PATH}"
 echo "========================="
 
 #------------------------------------------------------------------------------
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing pulumi functionality"
+echo "Testing zip functionality"
 
 # Test help command works
-check "pulumi help works" pulumi --help
+check "zip help works" zip --help
+
+# Test basic zip functionality (create a test archive)
+check "zip can create archive" bash -c 'echo "test content" > /tmp/test.txt && zip /tmp/test.zip /tmp/test.txt && test -f /tmp/test.zip'
+
+# Test unzip command exists (usually bundled with zip)
+check "unzip command exists" command -v unzip
+
+# Test unzip functionality
+check "unzip can extract archive" bash -c 'mkdir -p /tmp/extract && unzip -q /tmp/test.zip -d /tmp/extract && test -f /tmp/extract/tmp/test.txt'
 
 #------------------------------------------------------------------------------
 # Report Results

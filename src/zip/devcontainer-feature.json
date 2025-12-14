@@ -1,0 +1,7 @@
+{
+  "id": "zip",
+  "version": "1.0.0",
+  "name": "zip",
+  "documentationURL": "http://github.com/skevetter/features/tree/main/src/zip",
+  "description": "Zip is a compression and file packaging utility for Unix-like systems"
+}

@@ -12,5 +12,24 @@
       "description": "Version to install"
     }
   },
-  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} },
+  "customizations": {
+    "vscode": {
+      "extensions": ["biomejs.biome"],
+      "settings": {
+        "[javascript]": {
+          "editor.defaultFormatter": "biomejs.biome"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "biomejs.biome"
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "biomejs.biome"
+        },
+        "[json]": {
+          "editor.defaultFormatter": "biomejs.biome"
+        }
+      }
+    }
+  }
 }

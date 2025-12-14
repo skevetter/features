@@ -16,7 +16,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing shfmt installation..."
+echo "Testing shfmt installation"
 
 # Verify shfmt command exists and is executable
 check "shfmt command exists" command -v shfmt
@@ -28,7 +28,7 @@ check "shfmt version works" shfmt --version
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of shfmt command
 SHFMT_PATH=$(command -v shfmt)
@@ -42,7 +42,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing shfmt functionality..."
+echo "Testing shfmt functionality"
 
 # Test help command works
 check "shfmt help works" shfmt --help

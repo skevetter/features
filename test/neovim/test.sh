@@ -16,7 +16,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing neovim installation..."
+echo "Testing neovim installation"
 
 # Verify nvim command exists and is executable
 check "nvim command exists" command -v nvim
@@ -28,7 +28,7 @@ check "nvim version works" nvim --version
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of nvim command
 NVIM_PATH=$(command -v nvim)
@@ -42,7 +42,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing neovim functionality..."
+echo "Testing neovim functionality"
 
 # Test help command works
 check "nvim help works" nvim --help

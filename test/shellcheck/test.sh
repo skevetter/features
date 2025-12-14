@@ -13,24 +13,25 @@ env
 echo "=========================================================="
 
 #------------------------------------------------------------------------------
-# Configuration File Checks
+# Check Installation
 #------------------------------------------------------------------------------
 
-echo "Testing GPG configuration files"
+echo "Testing shellcheck installation"
 
-check "verify /etc/gnupg/gpg.conf is present" test -f /etc/gnupg/gpg.conf
-check "verify /etc/gnupg/gpg-agent.conf is present" test -f /etc/gnupg/gpg-agent.conf
+check "shellcheck is installed" command -v shellcheck
+
+check "shellcheck version" shellcheck --version
+
+# If VERSION is set and not "latest", check that the installed version matches
+if [ -n "$VERSION" ] && [ "$VERSION" != "latest" ]; then
+    echo "VERSION is set to '$VERSION', checking shellcheck version"
+    check "shellcheck version is correct" shellcheck --version | grep -F "$VERSION"
+else
+    echo "VERSION is unset or set to 'latest'; skipping exact version check"
+fi
 
 #------------------------------------------------------------------------------
-# Shell Configuration Checks
-#------------------------------------------------------------------------------
-
-echo "Testing shell configuration"
-
-check "verify GPG_TTY is set in bashrc" grep -q "export GPG_TTY=\$(tty)" /etc/bash.bashrc
-
-#------------------------------------------------------------------------------
-# Report Results
+# Results
 #------------------------------------------------------------------------------
 
 echo "Tests completed!"

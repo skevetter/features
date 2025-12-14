@@ -16,13 +16,13 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing pulumi installation"
+echo "Testing protoc installation"
 
-# Verify pulumi command exists and is executable
-check "pulumi command exists" command -v pulumi
+# Verify protoc command exists and is executable
+check "protoc command exists" command -v protoc
 
-# Verify pulumi version works
-check "pulumi version works" pulumi version
+# Verify protoc version works
+check "protoc version works" protoc --version
 
 #------------------------------------------------------------------------------
 # Binary Location Verification
@@ -30,22 +30,22 @@ check "pulumi version works" pulumi version
 
 echo "Testing binary locations and permissions"
 
-# Get the actual path of pulumi command
-PULUMI_PATH=$(command -v pulumi)
-check "pulumi binary is executable" test -x "${PULUMI_PATH}"
+# Get the actual path of protoc command
+PROTOC_PATH=$(command -v protoc)
+check "protoc binary is executable" test -x "${PROTOC_PATH}"
 
 echo "=== Binary Locations ==="
-echo "pulumi is located at: ${PULUMI_PATH}"
+echo "protoc is located at: ${PROTOC_PATH}"
 echo "========================="
 
 #------------------------------------------------------------------------------
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing pulumi functionality"
+echo "Testing protoc functionality"
 
 # Test help command works
-check "pulumi help works" pulumi --help
+check "protoc help works" protoc --help
 
 #------------------------------------------------------------------------------
 # Report Results

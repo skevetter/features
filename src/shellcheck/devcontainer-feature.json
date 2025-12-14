@@ -1,0 +1,16 @@
+{
+  "id": "shellcheck",
+  "version": "1.0.0",
+  "name": "shellcheck (via Github Releases)",
+  "documentationURL": "http://github.com/skevetter/features/tree/main/src/shellcheck",
+  "description": "ShellCheck is a static analysis tool for shell scripts.",
+  "options": {
+    "version": {
+      "default": "latest",
+      "description": "Select the version to install.",
+      "proposals": ["latest"],
+      "type": "string"
+    }
+  },
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
+}

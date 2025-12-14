@@ -16,7 +16,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing curl installation..."
+echo "Testing curl installation"
 
 # Verify curl command exists and is executable
 check "curl command exists" command -v curl
@@ -28,7 +28,7 @@ check "curl version works" curl --version
 # Binary Location Verification
 #------------------------------------------------------------------------------
 
-echo "Testing binary locations and permissions..."
+echo "Testing binary locations and permissions"
 
 # Get the actual path of curl command
 CURL_PATH=$(command -v curl)
@@ -42,7 +42,7 @@ echo "========================="
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing curl functionality..."
+echo "Testing curl functionality"
 
 # Test help command works
 check "curl help works" curl --help

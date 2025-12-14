@@ -20,7 +20,7 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing shell history installation and directory..."
+echo "Testing shell history installation and directory"
 
 # Verify shell history directory exists
 check "${SHELLHISTORY_DIR} is present" test -d ${SHELLHISTORY_DIR}
@@ -64,7 +64,7 @@ if [ "$(id -u)" -eq 0 ]; then
     exit 0
 fi
 
-echo "Testing user permissions and group membership..."
+echo "Testing user permissions and group membership"
 
 # Verify vscode user exists and has correct group membership
 check "user vscode exists" id -u vscode
@@ -82,7 +82,7 @@ echo "================================"
 # Write Permission Tests
 #------------------------------------------------------------------------------
 
-echo "Testing write permissions to history files..."
+echo "Testing write permissions to history files"
 
 # Test that the current user can write to the bash history file
 check "can write to ${BASH_HISTFILE}" bash -c "echo '# test' >> ${BASH_HISTFILE}"

@@ -16,13 +16,13 @@ echo "=========================================================="
 # Installation Checks
 #------------------------------------------------------------------------------
 
-echo "Testing pulumi installation"
+echo "Testing Kiro-CLI installation"
 
-# Verify pulumi command exists and is executable
-check "pulumi command exists" command -v pulumi
+# Verify main kiro-cli command exists and is executable
+check "kiro-cli command exists" command -v kiro-cli
 
-# Verify pulumi version works
-check "pulumi version works" pulumi version
+# Verify kiro-cli command returns version
+check "kiro-cli version works" kiro-cli --version
 
 #------------------------------------------------------------------------------
 # Binary Location Verification
@@ -30,22 +30,26 @@ check "pulumi version works" pulumi version
 
 echo "Testing binary locations and permissions"
 
-# Get the actual path of pulumi command
-PULUMI_PATH=$(command -v pulumi)
-check "pulumi binary is executable" test -x "${PULUMI_PATH}"
+# Get the actual path of kiro-cli command
+KIRO_PATH=$(command -v kiro-cli)
+check "kiro-cli binary is executable" test -x "${KIRO_PATH}"
 
 echo "=== Binary Locations ==="
-echo "pulumi is located at: ${PULUMI_PATH}"
+echo "kiro-cli is located at: ${KIRO_PATH}"
 echo "========================="
 
 #------------------------------------------------------------------------------
 # Functional Tests
 #------------------------------------------------------------------------------
 
-echo "Testing pulumi functionality"
+echo "Testing Kiro CLI functionality"
 
 # Test help command works
-check "pulumi help works" pulumi --help
+check "kiro-cli help works" kiro-cli --help
+
+check "kiro-cli inline suggestions enabled" kiro-cli inline enable
+
+check "kiro-cli inline status" kiro-cli inline status
 
 #------------------------------------------------------------------------------
 # Report Results
