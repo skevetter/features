@@ -1,0 +1,19 @@
+{
+  "name": "Git LFS (via GitHub Releases)",
+  "id": "git-lfs",
+  "version": "1.0.0",
+  "description": "Git Large File Storage (LFS) replaces large files with text pointers inside Git, while storing the file contents on a remote server.",
+  "documentationURL": "https://github.com/git-lfs/git-lfs",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest", "v3.7.0"],
+      "default": "latest",
+      "description": "Select the Git LFS version you would like to install"
+    }
+  },
+  "dependsOn": {
+    "ghcr.io/skevetter/features/picolayer:1": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  }
+}

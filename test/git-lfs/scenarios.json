@@ -1,0 +1,16 @@
+{
+  "test_debian": {
+    "image": "mcr.microsoft.com/devcontainers/base:debian",
+    "features": {
+      "git-lfs": {}
+    }
+  },
+  "test_specific_version": {
+    "image": "mcr.microsoft.com/devcontainers/base:debian",
+    "features": {
+      "git-lfs": {
+        "version": "v3.7.0"
+      }
+    }
+  }
+}
