@@ -12,5 +12,8 @@
       "description": "Select the Git LFS version you would like to install"
     }
   },
-  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
+  "dependsOn": {
+    "ghcr.io/skevetter/features/picolayer:1": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  }
 }
