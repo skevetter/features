@@ -1,0 +1,16 @@
+{
+  "name": "Paseo",
+  "id": "paseo",
+  "version": "1.0.0",
+  "description": "Paseo CLI — an agentic coding orchestrator for running and managing AI coding agents across git worktrees.",
+  "documentationURL": "https://www.npmjs.com/package/@getpaseo/cli",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest"],
+      "default": "latest",
+      "description": "Version to install"
+    }
+  },
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
+}
