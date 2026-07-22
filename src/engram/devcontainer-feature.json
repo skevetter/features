@@ -1,0 +1,18 @@
+{
+  "name": "Engram (via GitHub Releases)",
+  "id": "engram",
+  "version": "1.0.0",
+  "description": "Engram is a persistent memory engine that gives AI coding agents recall across sessions.",
+  "documentationURL": "https://github.com/Gentleman-Programming/engram",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest", "v1.18.0"],
+      "default": "latest",
+      "description": "Select the Engram version you would like to install"
+    }
+  },
+  "dependsOn": {
+    "ghcr.io/skevetter/features/picolayer:1": {}
+  }
+}
