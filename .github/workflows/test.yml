@@ -39,6 +39,8 @@ jobs:
               - './**/curl/**'
             fzf:
               - './**/fzf/**'
+            go-task:
+              - './**/go-task/**'
             gpg-hack:
               - './**/gpg-hack/**'
             hello:
