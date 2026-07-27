@@ -55,6 +55,8 @@ jobs:
               - './**/neovim/**'
             picolayer:
               - './**/picolayer/**'
+            paseo:
+              - './**/paseo/**'
             pkgx:
               - './**/pkgx/**'
             pre-commit-cache:
