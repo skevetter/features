@@ -1,0 +1,16 @@
+{
+  "name": "go-task",
+  "id": "go-task",
+  "version": "1.0.0",
+  "description": "Task is a task runner / build tool that aims to be simpler and easier to use than GNU Make",
+  "documentationURL": "https://github.com/go-task/task",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest", "v3.44.1"],
+      "default": "latest",
+      "description": "Select the go-task version you would like to install"
+    }
+  },
+  "dependsOn": { "ghcr.io/skevetter/features/picolayer:1": {} }
+}
