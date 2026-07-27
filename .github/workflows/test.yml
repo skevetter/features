@@ -37,6 +37,8 @@ jobs:
               - './**/color/**'
             curl:
               - './**/curl/**'
+            engram:
+              - './**/engram/**'
             fzf:
               - './**/fzf/**'
             go-task:
